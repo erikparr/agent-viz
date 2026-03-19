@@ -2,41 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 
-export function useTypewriter(text: string, speed: number = 20) {
-  var [displayed, setDisplayed] = useState("");
-  var [done, setDone] = useState(false);
-  var indexRef = useRef(0);
-  var textRef = useRef(text);
-
-  useEffect(() => {
-    // If text changed, reset
-    if (textRef.current !== text) {
-      textRef.current = text;
-      indexRef.current = 0;
-      setDisplayed("");
-      setDone(false);
-    }
-
-    if (indexRef.current >= text.length) {
-      setDone(true);
-      return;
-    }
-
-    var timer = setInterval(() => {
-      indexRef.current++;
-      setDisplayed(text.slice(0, indexRef.current));
-      if (indexRef.current >= text.length) {
-        setDone(true);
-        clearInterval(timer);
-      }
-    }, speed);
-
-    return () => clearInterval(timer);
-  }, [text, speed]);
-
-  return { displayed, done };
-}
-
 export function useTypewriterLines(lines: string[], speed: number = 15) {
   var [state, setState] = useState({ lineIndex: 0, charIndex: 0 });
   var [displayedLines, setDisplayedLines] = useState<string[]>([]);

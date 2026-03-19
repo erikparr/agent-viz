@@ -31,7 +31,7 @@ interface FlowNodeProps {
 export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
   var theme = STEP_THEME[step.type];
   var lines = getLines(step);
-  var { displayedLines, done } = useTypewriterLines(lines, 18);
+  var { displayedLines, done } = useTypewriterLines(lines, 6);
 
   var contentTextClass = step.type === "code"
     ? "text-step-code"
@@ -51,7 +51,10 @@ export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
       }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       onClick={onClick}
-      className="cursor-pointer group"
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick?.(); } }}
+      role="button"
+      tabIndex={0}
+      className="cursor-pointer group focus-visible:outline-none"
     >
       <div
         className="relative"
@@ -80,7 +83,7 @@ export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
                 <span className={`block truncate ${contentTextClass}`}>
                   {line}
                   {!done && i === (displayedLines.length - 1) && (
-                    <span className={`cursor-blink ${theme.text}`}>_</span>
+                    <span className="inline-block w-[6px] h-[12px] align-middle bg-border-accent cursor-blink ml-px" />
                   )}
                 </span>
               </div>

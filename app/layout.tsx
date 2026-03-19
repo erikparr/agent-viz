@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: "agent-viz",
@@ -12,13 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`dark ${mono.variable}`}>
       <body className="min-h-screen antialiased">
         {children}
       </body>

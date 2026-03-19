@@ -31,7 +31,7 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
                 </span>
                 <button
                   onClick={onClose}
-                  className="text-text-secondary hover:text-text-primary"
+                  className="text-text-secondary hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none"
                 >
                   [close]
                 </button>

@@ -54,7 +54,9 @@ export function useAgentStream() {
                     ? { ...prev, steps: [...prev.steps, step] }
                     : null
                 );
-              } catch {}
+              } catch (e) {
+                console.warn("Failed to parse SSE event:", data);
+              }
             }
           }
         }

@@ -87,17 +87,27 @@ export function CrosshatchBackground({ agentStatus = "idle" }: CrosshatchBackgro
     resize();
     window.addEventListener("resize", resize);
 
-    function animate() {
+    var lastFrame = 0;
+    function animate(time: number) {
+      frameRef.current = requestAnimationFrame(animate);
+
+      // Skip if tab hidden
+      if (document.hidden) return;
+
+      // Throttle to ~20fps when idle, full rate when running
       var status = statusRef.current;
+      var interval = status === "running" ? 0 : 50;
+      if (time - lastFrame < interval) return;
+      lastFrame = time;
+
       var targetIntensity = status === "running" ? 0.10 : status === "completed" ? 0.04 : 0.06;
       var current = material.uniforms.uIntensity.value;
       material.uniforms.uIntensity.value += (targetIntensity - current) * 0.02;
 
       material.uniforms.uTime.value += status === "running" ? 0.8 : 0.2;
       renderer.render(scene, camera);
-      frameRef.current = requestAnimationFrame(animate);
     }
-    animate();
+    frameRef.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("resize", resize);

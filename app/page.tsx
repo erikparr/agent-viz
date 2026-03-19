@@ -44,7 +44,7 @@ export default function Home() {
                 {run.status !== "running" && (
                   <button
                     onClick={reset}
-                    className="text-text-secondary hover:text-border-accent transition-colors"
+                    className="text-text-secondary hover:text-border-accent focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors"
                   >
                     [reset]
                   </button>
@@ -52,6 +52,12 @@ export default function Home() {
               </div>
 
               <AgentFlow run={run} />
+
+              {run.status === "error" && (
+                <div className="text-xs text-step-error p-2 border border-step-error/20 bg-step-error/5">
+                  error: {run.error || "Connection failed"}
+                </div>
+              )}
             </div>
           </TerminalChrome>
         )}

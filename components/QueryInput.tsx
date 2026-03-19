@@ -8,9 +8,11 @@ interface QueryInputProps {
 }
 
 const PRESET_QUERIES = [
-  "Compare the AI strategies of Apple and Google",
-  "What are the top 3 most populated cities in Europe?",
-  "Find recent breakthroughs in quantum computing",
+  "What projects has Erik worked on?",
+  "What is Erik's experience with AI and agentic systems?",
+  "Tell me about Erik's exhibition and installation work",
+  "What tech stack does Erik work with?",
+  "Describe Erik's most recent work",
 ];
 
 export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
@@ -32,9 +34,9 @@ export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-          placeholder="Enter a research query..."
+          placeholder="Ask about Erik's work..."
           disabled={disabled}
-          aria-label="Research query"
+          aria-label="Portfolio query"
           className="flex-1 bg-transparent text-text-primary placeholder:text-text-secondary outline-none focus-visible:ring-0 text-sm"
         />
         {!disabled && value.trim() && (

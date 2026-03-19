@@ -22,7 +22,7 @@ export default function Home() {
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
       <main className="relative z-10 max-w-5xl mx-auto px-4 py-8 space-y-6">
-        <TerminalChrome title="agent-viz v0.1.0">
+        <TerminalChrome title="erik parr — portfolio agent">
           <QueryInput
             onSubmit={startRun}
             disabled={run?.status === "running"}

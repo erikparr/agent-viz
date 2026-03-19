@@ -9,8 +9,8 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "agent-viz",
-  description: "AI Agent Workflow Visualization",
+  title: "Erik Parr — Portfolio Agent",
+  description: "Agentic portfolio for Erik Parr — ask about projects, skills, and experience",
 };
 
 export default function RootLayout({

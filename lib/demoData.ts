@@ -7,178 +7,349 @@ export interface DemoRun {
 
 export const DEMO_RUNS: DemoRun[] = [
   {
-    query: "Compare the AI strategies of Apple and Google",
+    query: "What projects has Erik worked on?",
     steps: [
       {
         type: "thinking",
         stepNumber: 1,
         timestamp: 0,
-        thought:
-          "I need to research the current AI strategies of both Apple and Google. Let me start by searching for recent information about each company's approach to AI.",
+        thought: "I'll search the portfolio database for all projects and their categories.",
       },
       {
         type: "code",
         stepNumber: 2,
-        timestamp: 1500,
-        code: `apple_results = web_search("Apple AI strategy 2024 2025")
-print(apple_results)`,
+        timestamp: 800,
+        code: `projects = search_portfolio("all projects")
+print(f"Found {len(projects)} projects")`,
       },
       {
         type: "tool_call",
         stepNumber: 3,
-        timestamp: 2000,
+        timestamp: 1200,
         toolCall: {
-          name: "web_search",
-          arguments: { query: "Apple AI strategy 2024 2025" },
+          name: "search_portfolio",
+          arguments: { query: "all projects", include: "title, category, role" },
         },
       },
       {
         type: "tool_result",
         stepNumber: 4,
-        timestamp: 4500,
+        timestamp: 2500,
         toolResult: {
-          output:
-            "Apple Intelligence: Apple's on-device AI approach focuses on privacy-first ML models running locally on Apple Silicon. Key features include system-wide writing tools, image generation (Image Playground), and Siri improvements with LLM integration. Partnership with OpenAI for complex queries via Private Cloud Compute.",
-          success: true,
-        },
-      },
-      {
-        type: "code",
-        stepNumber: 5,
-        timestamp: 5500,
-        code: `google_results = web_search("Google AI strategy Gemini 2024 2025")
-print(google_results)`,
-      },
-      {
-        type: "tool_call",
-        stepNumber: 6,
-        timestamp: 6000,
-        toolCall: {
-          name: "web_search",
-          arguments: { query: "Google AI strategy Gemini 2024 2025" },
-        },
-      },
-      {
-        type: "tool_result",
-        stepNumber: 7,
-        timestamp: 8500,
-        toolResult: {
-          output:
-            "Google's AI strategy centers on Gemini, its multimodal foundation model family. Cloud-first approach with AI integrated across Search, Workspace, Android. DeepMind merger accelerated research. Gemini Ultra, Pro, and Nano models target different use cases. Heavy investment in AI infrastructure (TPU v5, custom chips).",
+          output: "Found 27 projects across categories: AI (8), Interactive (18), Exhibition/Museum (12), AR/VR (7), 3D (8), Artwork (7), Mechatronic (5). Projects span from installation art and physical computing to AI-native product design and agentic systems.",
           success: true,
         },
       },
       {
         type: "thinking",
-        stepNumber: 8,
-        timestamp: 9500,
-        thought:
-          "Now I have data on both companies. Let me synthesize a comparison across key dimensions: approach (on-device vs cloud), privacy stance, model strategy, and ecosystem integration.",
+        stepNumber: 5,
+        timestamp: 3200,
+        thought: "Let me categorize the key projects by domain to give a structured overview.",
       },
       {
         type: "code",
-        stepNumber: 9,
-        timestamp: 11000,
-        code: `comparison = {
-    "Apple": {
-        "approach": "On-device first, privacy-centric",
-        "models": "Apple Foundation Models + OpenAI partnership",
-        "focus": "User experience, seamless integration",
-        "infrastructure": "Apple Silicon (M-series, A-series chips)"
-    },
-    "Google": {
-        "approach": "Cloud-first, multimodal",
-        "models": "Gemini family (Ultra/Pro/Nano)",
-        "focus": "Search, productivity, developer platform",
-        "infrastructure": "TPUs, custom AI accelerators"
-    }
+        stepNumber: 6,
+        timestamp: 4000,
+        code: `categories = {
+    "AI / Product": [
+        "Intuitive Surgical — surgical video analytics prototypes",
+        "FOAM — AI speech synthesis instrument (shipped product)",
+        "Agentic 3D Environments — UX research",
+        "Exquisite Landscape — generative AI art",
+    ],
+    "Interactive / 3D": [
+        "AudioVisual WebGL Shader Experiments",
+        "Interactive 3D Web Campaign",
+        "Adidas AR Exhibition — permanent installation",
+    ],
+    "Installation / Art": [
+        "Prague National Gallery — immersive projection",
+        "Microsoft Cybercrime Center — botnet data viz",
+        "ScreamOmeter — Norwegian Science Museum",
+        "Study for Resonators — mechatronic sound sculpture",
+    ],
 }
-
-for company, details in comparison.items():
-    print(f"\\n{company}:")
-    for key, value in details.items():
-        print(f"  {key}: {value}")`,
+for cat, items in categories.items():
+    print(f"\\n{cat}:")
+    for item in items:
+        print(f"  - {item}")`,
         codeOutput: `
-Apple:
-  approach: On-device first, privacy-centric
-  models: Apple Foundation Models + OpenAI partnership
-  focus: User experience, seamless integration
-  infrastructure: Apple Silicon (M-series, A-series chips)
+AI / Product:
+  - Intuitive Surgical — surgical video analytics prototypes
+  - FOAM — AI speech synthesis instrument (shipped product)
+  - Agentic 3D Environments — UX research
+  - Exquisite Landscape — generative AI art
 
-Google:
-  approach: Cloud-first, multimodal
-  models: Gemini family (Ultra/Pro/Nano)
-  focus: Search, productivity, developer platform
-  infrastructure: TPUs, custom AI accelerators`,
+Interactive / 3D:
+  - AudioVisual WebGL Shader Experiments
+  - Interactive 3D Web Campaign
+  - Adidas AR Exhibition — permanent installation
+
+Installation / Art:
+  - Prague National Gallery — immersive projection
+  - Microsoft Cybercrime Center — botnet data viz
+  - ScreamOmeter — Norwegian Science Museum
+  - Study for Resonators — mechatronic sound sculpture`,
       },
       {
         type: "final_answer",
-        stepNumber: 10,
-        timestamp: 13000,
-        finalAnswer:
-          "Apple and Google have fundamentally different AI strategies:\n\n**Apple** prioritizes on-device processing and privacy. Their Apple Intelligence runs ML models locally on Apple Silicon, with a partnership with OpenAI for complex queries routed through Private Cloud Compute. The focus is on seamless UX integration.\n\n**Google** takes a cloud-first, multimodal approach with the Gemini model family. They invest heavily in AI infrastructure (TPUs) and integrate AI across Search, Workspace, and Android. Their strategy is more platform/developer oriented.\n\nKey difference: Apple treats AI as an invisible UX layer; Google treats AI as the core product.",
+        stepNumber: 7,
+        timestamp: 6000,
+        finalAnswer: "Erik's portfolio spans 27 projects across AI product design, interactive experiences, and installation art.\n\nRecent AI/Product work includes advanced surgical video prototypes at Intuitive Surgical, FOAM (an AI speech-to-instrument product shipped commercially), and UX research into agentic 3D environments.\n\nInteractive work includes WebGL shader experiments, 3D web campaigns, and the permanent Adidas AR exhibition in Germany.\n\nInstallation and art projects include work at the Prague National Gallery, Microsoft Cybercrime Center (botnet data visualization), and mechatronic sound sculptures exhibited internationally.\n\nHe also founded Extrasensory, a digital product studio that shipped VEX MIDI Expression and FOAM — both used by music producers worldwide.",
       },
     ],
   },
   {
-    query: "What are the top 3 most populated cities in Europe?",
+    query: "What is Erik's experience with AI and agentic systems?",
     steps: [
       {
         type: "thinking",
         stepNumber: 1,
         timestamp: 0,
-        thought: "I'll search for current population data for European cities.",
+        thought: "I'll search for AI-related projects and his stated focus areas around agentic systems.",
       },
       {
         type: "code",
         stepNumber: 2,
-        timestamp: 1200,
-        code: `results = web_search("most populated cities in Europe 2024 population")
-print(results)`,
+        timestamp: 800,
+        code: `ai_work = search_portfolio("AI agentic systems")
+skills = get_skills("AI, agentic, machine learning")
+print(ai_work, skills)`,
       },
       {
         type: "tool_call",
         stepNumber: 3,
-        timestamp: 1500,
+        timestamp: 1200,
         toolCall: {
-          name: "web_search",
-          arguments: { query: "most populated cities in Europe 2024 population" },
+          name: "search_portfolio",
+          arguments: { query: "AI agentic systems machine learning" },
         },
       },
       {
         type: "tool_result",
         stepNumber: 4,
-        timestamp: 3500,
+        timestamp: 2800,
         toolResult: {
-          output:
-            "Top European cities by population (city proper): 1. Istanbul - 15.8 million (transcontinental), 2. Moscow - 13.1 million, 3. London - 9.0 million, 4. Saint Petersburg - 5.6 million, 5. Berlin - 3.7 million",
+          output: "Profile: 'Building Agentic Systems for Interactive Products.' Core focus areas: (1) Agentic Systems for Product Development — designing AI-augmented workflows for faster design-to-production cycles, (2) Complex Tools & AI-Native Products — interaction design for agentic and conversational UI patterns, designing for uncertainty and AI-driven workflows. AI projects: Intuitive Surgical (AI/ML prototypes for surgical video), Agentic 3D Environments (UX research into agents with visualization capabilities), FOAM (AI speech synthesis pipeline), Exquisite Landscape (LangChain + generative AI art), Design System Pipeline (Claude Code + Figma MCP orchestration), Sprinter Health (AI design prototypes for healthcare).",
           success: true,
         },
       },
       {
-        type: "code",
+        type: "thinking",
         stepNumber: 5,
+        timestamp: 3500,
+        thought: "His AI work spans from product design to hands-on engineering. Let me pull details on the agentic systems specifically.",
+      },
+      {
+        type: "code",
+        stepNumber: 6,
+        timestamp: 4200,
+        code: `details = get_project_details("agentic 3D environments")
+print(details)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 7,
         timestamp: 4500,
-        code: `cities = [
-    ("Istanbul", 15.8, "Turkey (transcontinental)"),
-    ("Moscow", 13.1, "Russia"),
-    ("London", 9.0, "United Kingdom"),
-]
-
-print("Top 3 Most Populated Cities in Europe:")
-for i, (city, pop, country) in enumerate(cities, 1):
-    print(f"  {i}. {city}, {country} — {pop}M")`,
-        codeOutput: `Top 3 Most Populated Cities in Europe:
-  1. Istanbul, Turkey (transcontinental) — 15.8M
-  2. Moscow, Russia — 13.1M
-  3. London, United Kingdom — 9.0M`,
+        toolCall: {
+          name: "get_project_details",
+          arguments: { project: "Agentic 3D Environments" },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 8,
+        timestamp: 5500,
+        toolResult: {
+          output: "UX Research: Agentic 3D Environments — Ongoing research into agentic UX where AI agents are natively equipped with visualization capabilities to communicate more effectively. Working prototype of an agent that can traverse and display user queries in a 3D mapped environment. Roles: UX Research, AI/ML, 3D Visualization.",
+          success: true,
+        },
       },
       {
         type: "final_answer",
+        stepNumber: 9,
+        timestamp: 7000,
+        finalAnswer: "Erik's tagline is 'Building Agentic Systems for Interactive Products' — and his work backs it up across multiple dimensions:\n\nDesign strategy: He designs AI-augmented workflows that reduce the gap between design intent and shipped product, focusing on how to keep product vision intact through agentic tooling.\n\nHands-on AI engineering: At Intuitive Surgical, he prototypes AI/ML tools for surgical video analytics. He built FOAM's async pipeline using text-to-speech APIs with forced phoneme alignment. His Exquisite Landscape project uses LangChain + OpenAI for chained generative prompts with Stability AI inpainting.\n\nAgentic UX research: He's actively researching how AI agents can use 3D visualization as a native communication medium — with a working prototype where agents traverse and display queries in 3D space.\n\nDesign systems: He built a bidirectional design pipeline using Claude Code as the orchestration layer between Figma and production code.\n\nHis approach combines deep engineering fluency with product design — he doesn't just design for AI, he builds the agentic systems himself.",
+      },
+    ],
+  },
+  {
+    query: "Tell me about Erik's exhibition and installation work",
+    steps: [
+      {
+        type: "thinking",
+        stepNumber: 1,
+        timestamp: 0,
+        thought: "I'll search for exhibition, museum, and installation projects.",
+      },
+      {
+        type: "code",
+        stepNumber: 2,
+        timestamp: 800,
+        code: `exhibitions = search_portfolio("exhibition museum installation")
+print(exhibitions)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 3,
+        timestamp: 1100,
+        toolCall: {
+          name: "search_portfolio",
+          arguments: { query: "exhibition museum installation artwork" },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 4,
+        timestamp: 2500,
+        toolResult: {
+          output: "Found 12 exhibition/museum projects: Prague National Gallery (immersive projection mapping), Microsoft Cybercrime Center (permanent data visualization installation), ScreamOmeter at Norwegian Science Museum (sympathetic resonance game), Study for Resonators (50-unit mechatronic sound sculpture, Raflost Festival Iceland), Adidas AR Exhibition (permanent, HQ Germany), Microperception (Third Space Gallery Helsinki), Invisible Landscapes (nano-scale art), One Hundred Thousand Landscapes (generative sound installation), Technical commissions for artist Egill Saebjornsson (international exhibitions), Wonwei studio work for Olafur Arnalds world tour visuals.",
+          success: true,
+        },
+      },
+      {
+        type: "thinking",
+        stepNumber: 5,
+        timestamp: 3200,
+        thought: "This is a strong body of work spanning multiple countries and institutions. Let me organize by type.",
+      },
+      {
+        type: "code",
         stepNumber: 6,
+        timestamp: 3800,
+        code: `permanent = ["Microsoft Cybercrime Center", "Adidas AR Exhibition (Germany)"]
+museum = ["Prague National Gallery", "Norwegian Science Museum", "Third Space Gallery Helsinki"]
+festival = ["Raflost Festival (Reykjavik)", "International art fairs"]
+tour = ["Olafur Arnalds world tour (via Wonwei studio)"]
+print("Permanent:", permanent)
+print("Museum:", museum)
+print("Festival:", festival)
+print("Tour:", tour)`,
+        codeOutput: `Permanent: ['Microsoft Cybercrime Center', 'Adidas AR Exhibition (Germany)']
+Museum: ['Prague National Gallery', 'Norwegian Science Museum', 'Third Space Gallery Helsinki']
+Festival: ['Raflost Festival (Reykjavik)', 'International art fairs']
+Tour: ['Olafur Arnalds world tour (via Wonwei studio)']`,
+      },
+      {
+        type: "final_answer",
+        stepNumber: 7,
+        timestamp: 5500,
+        finalAnswer: "Erik has an extensive exhibition and installation practice spanning permanent installations, museums, festivals, and touring shows.\n\nPermanent installations include a data visualization piece at the Microsoft Cybercrime Center (mapping botnets from millions of infected computers) and the Adidas AR exhibition at their German headquarters.\n\nMuseum work includes immersive projection mapping at the Prague National Gallery, the ScreamOmeter at the Norwegian Science Museum (where visitors break wine glasses with their voice using sympathetic resonance), and laser-etched light compositions at Third Space Gallery in Helsinki.\n\nHe created Study for Resonators — 50 mechatronic structures forming an evolving polyrhythmic sound sculpture — commissioned by Raflost festival in Reykjavik.\n\nThrough Wonwei studio, he created real-time 3D concert visuals for Olafur Arnalds' world tour, using Kinect-driven reactive landscapes.\n\nHis installation work consistently bridges custom software, physical computing, and artistic vision.",
+      },
+    ],
+  },
+  {
+    query: "What tech stack does Erik work with?",
+    steps: [
+      {
+        type: "thinking",
+        stepNumber: 1,
+        timestamp: 0,
+        thought: "I'll pull skills and technologies mentioned across all projects and his profile.",
+      },
+      {
+        type: "code",
+        stepNumber: 2,
+        timestamp: 600,
+        code: `skills = get_skills("all")
+print(skills)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 3,
+        timestamp: 900,
+        toolCall: {
+          name: "get_skills",
+          arguments: { category: "all" },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 4,
+        timestamp: 2000,
+        toolResult: {
+          output: "Frontend: React, Next.js, Vue/Nuxt, TypeScript, Tailwind CSS, Three.js, WebGL/Shaders, Framer Motion. Backend: Node.js, Python, C++ (JUCE/openFrameworks). AI/ML: LangChain, OpenAI API, Stability AI, Claude API, Figma MCP. 3D/XR: Three.js, Unity3D, WebXR, ARKit, 8th Wall. Physical computing: Arduino, custom circuit design, mechatronics. Infrastructure: Vercel, Firebase, Railway, Stripe, CI/CD pipelines. Design: Figma, Tokens Studio, design systems, WCAG accessibility.",
+          success: true,
+        },
+      },
+      {
+        type: "final_answer",
+        stepNumber: 5,
+        timestamp: 3500,
+        finalAnswer: "Erik works across a wide stack, reflecting his hybrid design-engineering role:\n\nFrontend: React, Next.js, Vue/Nuxt, TypeScript, Tailwind CSS, Three.js, WebGL shaders, Framer Motion\n\nBackend: Node.js, Python, C++ (JUCE for audio DSP, openFrameworks for generative graphics)\n\nAI/ML: LangChain, OpenAI API, Stability AI, Claude API/Claude Code, Figma MCP\n\n3D/XR: Three.js, Unity3D, WebXR, Apple ARKit, 8th Wall\n\nPhysical computing: Arduino, custom circuit design, mechatronics\n\nInfra: Vercel, Firebase, Railway, Stripe integration, CI/CD pipelines\n\nDesign tools: Figma, Tokens Studio, design system architecture, WCAG compliance\n\nHe's notable for shipping production code — not just prototypes. FOAM and VEX are commercial products, and his Intuitive Surgical work is production-facing.",
+      },
+    ],
+  },
+  {
+    query: "Describe Erik's most recent work",
+    steps: [
+      {
+        type: "thinking",
+        stepNumber: 1,
+        timestamp: 0,
+        thought: "I'll look at the most recent projects in the portfolio — likely the ones listed first.",
+      },
+      {
+        type: "code",
+        stepNumber: 2,
+        timestamp: 700,
+        code: `recent = get_project_details("recent", limit=3)
+print(recent)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 3,
+        timestamp: 1000,
+        toolCall: {
+          name: "get_project_details",
+          arguments: { filter: "recent", limit: 3 },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 4,
+        timestamp: 2200,
+        toolResult: {
+          output: "1. Intuitive Surgical — Design Technologist role. Sole design engineer embedded in advanced product design team, building prototypes for surgical video and analytics tools. Case-explorer concepts linking procedure video with system data and event timelines. Interfaces for automated post-case review. 2. Agentic 3D Environments — UX Research into agents with native 3D visualization capabilities. Working prototype. 3. Design System Case Study — Built bidirectional pipeline between Next.js codebase and Figma using Tokens Studio, Figma MCP, and Claude Code. Completed in 1 day.",
+          success: true,
+        },
+      },
+      {
+        type: "thinking",
+        stepNumber: 5,
+        timestamp: 2800,
+        thought: "His recent work is heavily focused on AI-augmented design tooling and advanced prototyping. Let me also check the Sprinter Health project.",
+      },
+      {
+        type: "code",
+        stepNumber: 6,
+        timestamp: 3300,
+        code: `sprinter = get_project_details("Sprinter Health")
+print(sprinter)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 7,
+        timestamp: 3600,
+        toolCall: {
+          name: "get_project_details",
+          arguments: { project: "Sprinter Health" },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 8,
+        timestamp: 4500,
+        toolResult: {
+          output: "Sprinter Health — AI Design Prototypes exploring how AI legibility and agentic UX principles apply to mobile healthcare workflows. Two interactive prototypes: Pre-Visit Briefing (patient context, AI briefing, care gaps, risk signals) and Adaptive Visit (real-time AI insights during patient interactions). Features blood pressure monitoring, A1C tracking, medication adherence visualization.",
+          success: true,
+        },
+      },
+      {
+        type: "final_answer",
+        stepNumber: 9,
         timestamp: 6000,
-        finalAnswer:
-          "The top 3 most populated cities in Europe (city proper):\n\n1. **Istanbul, Turkey** — 15.8 million (note: transcontinental city spanning Europe and Asia)\n2. **Moscow, Russia** — 13.1 million\n3. **London, United Kingdom** — 9.0 million",
+        finalAnswer: "Erik's most recent work centers on AI-augmented design and advanced prototyping:\n\nAt Intuitive Surgical, he's the sole design technologist embedded in an advanced product team, building future-facing prototypes for surgical video analytics — including case-explorer interfaces that link procedure video with system data and event timelines.\n\nHis Agentic 3D Environments research explores how AI agents can use 3D visualization as a native communication channel, with a working prototype demonstrating agents traversing user queries in mapped 3D space.\n\nFor Sprinter Health, he created AI design prototypes applying agentic UX principles to mobile healthcare — with interactive demos for pre-visit briefings and adaptive real-time visit assistance.\n\nHe also completed a design system case study in a single day, building a full bidirectional pipeline between a production Next.js codebase and Figma using Claude Code as the orchestration layer.\n\nThe throughline: he's focused on where AI meets product design, building the actual tools and prototypes himself.",
       },
     ],
   },

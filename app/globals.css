@@ -3,20 +3,20 @@
 @theme {
   --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
 
-  --color-bg-primary: #04060e;
-  --color-bg-surface: #0a0e1a;
-  --color-bg-elevated: #141a2e;
-  --color-border-accent: #2d5ff5;
-  --color-border-muted: #2e3d5c;
-  --color-text-primary: #f0f4fa;
-  --color-text-secondary: #94a8c8;
+  --color-bg-primary: #050709;
+  --color-bg-surface: #0c1017;
+  --color-bg-elevated: #151b25;
+  --color-border-accent: #7d8ba0;
+  --color-border-muted: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
 
-  --color-step-thinking: #6366f1;
-  --color-step-code: #22c55e;
-  --color-step-tool: #06b6d4;
-  --color-step-result: #2d5ff5;
-  --color-step-final: #eab308;
-  --color-step-error: #ef4444;
+  --color-step-thinking: #b0bec9;
+  --color-step-code: #4ade80;
+  --color-step-tool: #2d5ff5;
+  --color-step-result: #e2e8f0;
+  --color-step-final: #f8fafc;
+  --color-step-error: #f87171;
 }
 
 body {

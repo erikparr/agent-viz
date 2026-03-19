@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { FlowNode } from "./FlowNode";
 import { StepDetail } from "./StepDetail";
-import { STEP_THEME } from "@/lib/theme";
 import type { AgentRun } from "@/lib/types";
 
 interface AgentFlowProps {
@@ -16,26 +15,20 @@ export function AgentFlow({ run }: AgentFlowProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-start gap-x-1 gap-y-3">
+      <div className="flex flex-col gap-2">
         {run.steps.map((step, i) => (
-          <div key={i} className="flex items-center gap-1">
-            <FlowNode
-              step={step}
-              isActive={selectedStep === i}
-              onClick={() => setSelectedStep(selectedStep === i ? null : i)}
-            />
-            {i < run.steps.length - 1 && (
-              <span className={`text-xs whitespace-nowrap select-none ${STEP_THEME[step.type].text}`}>
-                →
-              </span>
-            )}
-          </div>
+          <FlowNode
+            key={i}
+            step={step}
+            index={i}
+            isActive={selectedStep === i}
+            onClick={() => setSelectedStep(selectedStep === i ? null : i)}
+          />
         ))}
 
         {run.status === "running" && (
-          <div className="flex items-center gap-1 text-xs text-border-accent self-center">
-            <span>→</span>
-            <span className="cursor-blink">_</span>
+          <div className="flex items-center gap-2 text-xs text-border-accent pl-8">
+            <span className="inline-block w-[6px] h-[12px] bg-border-accent cursor-blink" />
           </div>
         )}
       </div>

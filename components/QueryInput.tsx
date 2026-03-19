@@ -43,7 +43,7 @@ export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
         <button
           onClick={handleSubmit}
           disabled={disabled || !value.trim()}
-          className="text-xs px-2 py-1 min-h-[44px] bg-border-accent text-black font-bold disabled:opacity-30 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-text-primary focus-visible:ring-offset-1 focus-visible:ring-offset-bg-primary transition-all"
+          className="text-xs px-4 py-1.5 bg-border-accent text-black font-bold disabled:opacity-30 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-text-primary focus-visible:ring-offset-1 focus-visible:ring-offset-bg-primary transition-all"
         >
           RUN
         </button>

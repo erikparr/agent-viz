@@ -5,18 +5,22 @@ import { useTypewriterLines } from "@/hooks/useTypewriter";
 import { STEP_THEME } from "@/lib/theme";
 import type { AgentStep } from "@/lib/types";
 
+function stripMarkdown(text: string): string {
+  return text.replace(/\*\*(.*?)\*\*/g, "$1").replace(/\*(.*?)\*/g, "$1");
+}
+
 function getLines(step: AgentStep): string[] {
   var lines: string[] = [];
   if (step.thought) {
-    lines = step.thought.split("\n").slice(0, 3).map((l) => l.slice(0, 70));
+    lines = step.thought.split("\n").slice(0, 2).map((l) => l.slice(0, 80));
   } else if (step.code) {
-    lines = step.code.split("\n").slice(0, 4).map((l) => l.slice(0, 70));
+    lines = step.code.split("\n").slice(0, 3).map((l) => l.slice(0, 80));
   } else if (step.toolCall) {
-    lines = [`${step.toolCall.name}()`, ...Object.entries(step.toolCall.arguments).map(([k, v]) => `  ${k}: ${JSON.stringify(v).slice(0, 50)}`)];
+    lines = [`${step.toolCall.name}(${JSON.stringify(step.toolCall.arguments).slice(0, 60)})`];
   } else if (step.toolResult) {
-    lines = step.toolResult.output.split("\n").slice(0, 3).map((l) => l.slice(0, 70));
+    lines = [stripMarkdown(step.toolResult.output).slice(0, 80)];
   } else if (step.finalAnswer) {
-    lines = step.finalAnswer.split("\n").slice(0, 4).map((l) => l.slice(0, 70));
+    lines = stripMarkdown(step.finalAnswer).split("\n").slice(0, 3).map((l) => l.slice(0, 80));
   }
   if (lines.length === 0) lines = ["..."];
   return lines;
@@ -24,11 +28,12 @@ function getLines(step: AgentStep): string[] {
 
 interface FlowNodeProps {
   step: AgentStep;
+  index: number;
   isActive?: boolean;
   onClick?: () => void;
 }
 
-export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
+export function FlowNode({ step, index, isActive, onClick }: FlowNodeProps) {
   var theme = STEP_THEME[step.type];
   var lines = getLines(step);
   var { displayedLines, done } = useTypewriterLines(lines, 6);
@@ -43,13 +48,12 @@ export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.8, y: 10 }}
+      initial={{ opacity: 0, x: -8 }}
       animate={{
         opacity: 1,
-        scale: isActive ? 1.02 : 1,
-        y: 0,
+        x: 0,
       }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
       onClick={onClick}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick?.(); } }}
       role="button"
@@ -57,25 +61,25 @@ export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
       className="cursor-pointer group focus-visible:outline-none"
     >
       <div
-        className="relative"
+        className="relative max-w-2xl transition-[filter] duration-200"
         style={{
-          minWidth: step.type === "tool_call" ? 140 : 200,
           filter: isActive ? `drop-shadow(0 0 8px ${theme.hex})` : "none",
-          transition: "filter 0.2s ease",
         }}
       >
-        {/* Top border with label */}
+        {/* Top border with step number and label */}
         <div className={`flex items-center text-xs leading-none ${theme.text}`}>
           <span>╭── </span>
+          <span className="text-text-secondary font-normal">{String(index + 1).padStart(2, "0")}</span>
+          <span className="mx-1 text-border-muted">·</span>
           <span className="font-bold">{theme.label}</span>
           <span className="flex-1 overflow-hidden whitespace-nowrap">
-            {" "}{"─".repeat(80)}
+            {" "}{"─".repeat(120)}
           </span>
           <span>╮</span>
         </div>
 
         {/* Content lines with tinted background */}
-        <div className={theme.bg}>
+        <div className={`${theme.bg} group-hover:brightness-150 transition-[filter] duration-150`}>
           {renderedLines.map((line, i) => (
             <div key={i} className="flex text-xs leading-snug">
               <span className={theme.text}>│</span>
@@ -96,7 +100,7 @@ export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
         <div className={`flex items-center text-xs leading-none ${theme.text}`}>
           <span>╰</span>
           <span className="flex-1 overflow-hidden whitespace-nowrap">
-            {"─".repeat(80)}
+            {"─".repeat(120)}
           </span>
           <span>╯</span>
         </div>

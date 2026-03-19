@@ -25,9 +25,8 @@ export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
 
   return (
     <div className="space-y-3">
-      {/* Terminal prompt input */}
-      <div className="flex items-center gap-2 bg-[var(--color-bg-surface)] px-3 py-2 border border-[var(--color-border-muted)] rounded-sm">
-        <span className="text-[var(--color-border-accent)] font-bold select-none">&gt;</span>
+      <div className="flex items-center gap-2 bg-bg-surface px-3 py-2 border border-border-muted">
+        <span className="text-border-accent font-bold select-none">&gt;</span>
         <input
           type="text"
           value={value}
@@ -35,21 +34,20 @@ export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="Enter a research query..."
           disabled={disabled}
-          className="flex-1 bg-transparent text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] outline-none text-sm"
+          className="flex-1 bg-transparent text-text-primary placeholder:text-text-secondary outline-none text-sm"
         />
         {!disabled && value.trim() && (
-          <span className="cursor-blink text-[var(--color-border-accent)]">_</span>
+          <span className="cursor-blink text-border-accent">_</span>
         )}
         <button
           onClick={handleSubmit}
           disabled={disabled || !value.trim()}
-          className="text-xs px-2 py-1 bg-[var(--color-border-accent)] text-black font-bold disabled:opacity-30 hover:brightness-110 transition-all"
+          className="text-xs px-2 py-1 bg-border-accent text-black font-bold disabled:opacity-30 hover:brightness-110 transition-all"
         >
           RUN
         </button>
       </div>
 
-      {/* Preset queries */}
       <div className="flex flex-wrap gap-2">
         {PRESET_QUERIES.map((q) => (
           <button
@@ -59,7 +57,7 @@ export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
               if (!disabled) onSubmit(q);
             }}
             disabled={disabled}
-            className="text-xs px-2 py-1 border border-[var(--color-border-muted)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-accent)] hover:text-[var(--color-text-primary)] transition-colors disabled:opacity-30"
+            className="text-xs px-2 py-1 border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary transition-colors disabled:opacity-30"
           >
             {q}
           </button>

@@ -89,7 +89,7 @@ export function CrosshatchBackground({ agentStatus = "idle" }: CrosshatchBackgro
 
     function animate() {
       var status = statusRef.current;
-      var targetIntensity = status === "running" ? 0.12 : status === "completed" ? 0.04 : 0.06;
+      var targetIntensity = status === "running" ? 0.10 : status === "completed" ? 0.04 : 0.06;
       var current = material.uniforms.uIntensity.value;
       material.uniforms.uIntensity.value += (targetIntensity - current) * 0.02;
 

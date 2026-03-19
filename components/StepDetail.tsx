@@ -2,16 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./TerminalChrome";
+import { STEP_THEME } from "@/lib/theme";
 import type { AgentStep } from "@/lib/types";
-
-const STEP_COLORS: Record<AgentStep["type"], string> = {
-  thinking: "var(--color-step-thinking)",
-  code: "var(--color-step-code)",
-  tool_call: "var(--color-step-tool)",
-  tool_result: "var(--color-step-result)",
-  final_answer: "var(--color-step-final)",
-  error: "var(--color-step-error)",
-};
 
 interface StepDetailProps {
   step: AgentStep | null;
@@ -30,16 +22,16 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
         >
           <TerminalChrome
             title={`Step ${step.stepNumber} Detail`}
-            accentColor={STEP_COLORS[step.type]}
+            colorClass={STEP_THEME[step.type].text}
           >
-            <div className="space-y-2 text-xs">
+            <div className={`space-y-3 text-xs ${STEP_THEME[step.type].bg}`}>
               <div className="flex justify-between items-center">
-                <span className="font-bold uppercase" style={{ color: STEP_COLORS[step.type] }}>
+                <span className={`font-bold uppercase ${STEP_THEME[step.type].text}`}>
                   {step.type.replace("_", " ")}
                 </span>
                 <button
                   onClick={onClose}
-                  className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  className="text-text-secondary hover:text-text-primary"
                 >
                   [close]
                 </button>
@@ -47,15 +39,15 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
 
               {step.thought && (
                 <div>
-                  <div className="text-[var(--color-text-secondary)] mb-1">// reasoning</div>
-                  <pre className="whitespace-pre-wrap text-[var(--color-text-primary)]">{step.thought}</pre>
+                  <div className={`mb-1 opacity-70 ${STEP_THEME[step.type].text}`}>// reasoning</div>
+                  <pre className="whitespace-pre-wrap text-text-primary">{step.thought}</pre>
                 </div>
               )}
 
               {step.code && (
                 <div>
-                  <div className="text-[var(--color-step-code)] mb-1">// code</div>
-                  <pre className="whitespace-pre-wrap text-[var(--color-text-primary)] bg-[var(--color-bg-primary)] p-2">
+                  <div className="text-step-code mb-1">// code</div>
+                  <pre className="whitespace-pre-wrap p-2 border-l-2 border-step-code bg-step-code/5 text-step-code">
                     {step.code}
                   </pre>
                 </div>
@@ -63,31 +55,35 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
 
               {step.codeOutput && (
                 <div>
-                  <div className="text-[var(--color-text-secondary)] mb-1">// output</div>
-                  <pre className="whitespace-pre-wrap text-[var(--color-step-result)]">{step.codeOutput}</pre>
+                  <div className="mb-1 opacity-70 text-step-result">// output</div>
+                  <pre className="whitespace-pre-wrap p-2 border-l-2 border-step-result bg-step-result/5 text-step-result">
+                    {step.codeOutput}
+                  </pre>
                 </div>
               )}
 
               {step.toolCall && (
                 <div>
-                  <div className="text-[var(--color-step-tool)] mb-1">// tool call</div>
-                  <pre className="whitespace-pre-wrap text-[var(--color-text-primary)]">
-                    {step.toolCall.name}({JSON.stringify(step.toolCall.arguments, null, 2)})
+                  <div className="text-step-tool mb-1">// tool call</div>
+                  <pre className="whitespace-pre-wrap p-2 border-l-2 border-step-tool bg-step-tool/5 text-text-primary">
+                    <span className="text-step-tool">{step.toolCall.name}</span>({JSON.stringify(step.toolCall.arguments, null, 2)})
                   </pre>
                 </div>
               )}
 
               {step.toolResult && (
                 <div>
-                  <div className="text-[var(--color-text-secondary)] mb-1">// result</div>
-                  <pre className="whitespace-pre-wrap text-[var(--color-text-primary)]">{step.toolResult.output}</pre>
+                  <div className="mb-1 opacity-70 text-step-result">// result</div>
+                  <pre className="whitespace-pre-wrap text-text-primary">{step.toolResult.output}</pre>
                 </div>
               )}
 
               {step.finalAnswer && (
                 <div>
-                  <div className="text-[var(--color-step-final)] mb-1">// final answer</div>
-                  <pre className="whitespace-pre-wrap text-[var(--color-text-primary)]">{step.finalAnswer}</pre>
+                  <div className="text-step-final mb-1">// final answer</div>
+                  <pre className="whitespace-pre-wrap p-2 border-l-2 border-step-final bg-step-final/5 text-step-final">
+                    {step.finalAnswer}
+                  </pre>
                 </div>
               )}
             </div>

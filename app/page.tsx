@@ -9,12 +9,19 @@ import { useAgentStream } from "@/hooks/useAgentStream";
 export default function Home() {
   var { run, startRun, reset } = useAgentStream();
 
+  var statusClass = run?.status === "running"
+    ? "text-step-code"
+    : run?.status === "completed"
+    ? "text-step-final"
+    : run?.status === "error"
+    ? "text-step-error"
+    : "text-text-secondary";
+
   return (
     <>
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
       <main className="relative z-10 max-w-5xl mx-auto px-4 py-8 space-y-6">
-        {/* Header + Query combined */}
         <TerminalChrome title="agent-viz v0.1.0">
           <QueryInput
             onSubmit={startRun}
@@ -22,33 +29,22 @@ export default function Home() {
           />
         </TerminalChrome>
 
-        {/* Agent Flow Visualization */}
         {run && (
           <TerminalChrome title={`Run: ${run.query.slice(0, 50)}`}>
             <div className="space-y-3">
-              {/* Status line */}
               <div className="flex items-center justify-between text-xs">
-                <span className="text-[var(--color-text-secondary)]">
+                <span className="text-text-secondary">
                   status:{" "}
-                  <span
-                    className={
-                      run.status === "running"
-                        ? "text-[var(--color-step-code)]"
-                        : run.status === "completed"
-                        ? "text-[var(--color-step-final)]"
-                        : run.status === "error"
-                        ? "text-[var(--color-step-error)]"
-                        : "text-[var(--color-text-secondary)]"
-                    }
-                  >
-                    {run.status}
+                  <span className={statusClass}>
+                    {run.status === "running" ? "● running" : run.status === "completed" ? "● completed" : run.status}
                   </span>
-                  {" | "}steps: {run.steps.length}
+                  <span className="text-border-muted"> | </span>
+                  steps: <span className="text-text-primary">{run.steps.length}</span>
                 </span>
                 {run.status !== "running" && (
                   <button
                     onClick={reset}
-                    className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                    className="text-text-secondary hover:text-border-accent transition-colors"
                   >
                     [reset]
                   </button>

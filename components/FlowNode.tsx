@@ -1,27 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTypewriterLines } from "@/hooks/useTypewriter";
+import { STEP_THEME } from "@/lib/theme";
 import type { AgentStep } from "@/lib/types";
 
-const STEP_CONFIG: Record<AgentStep["type"], { color: string; label: string }> = {
-  thinking: { color: "var(--color-step-thinking)", label: "THINK" },
-  code: { color: "var(--color-step-code)", label: "CODE" },
-  tool_call: { color: "var(--color-step-tool)", label: "TOOL" },
-  tool_result: { color: "var(--color-step-result)", label: "RESULT" },
-  final_answer: { color: "var(--color-step-final)", label: "ANSWER" },
-  error: { color: "var(--color-step-error)", label: "ERROR" },
-};
-
-interface FlowNodeProps {
-  step: AgentStep;
-  isActive?: boolean;
-  onClick?: () => void;
-}
-
-export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
-  var config = STEP_CONFIG[step.type];
-
-  // Build preview lines based on content type
+function getLines(step: AgentStep): string[] {
   var lines: string[] = [];
   if (step.thought) {
     lines = step.thought.split("\n").slice(0, 3).map((l) => l.slice(0, 70));
@@ -35,6 +19,27 @@ export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
     lines = step.finalAnswer.split("\n").slice(0, 4).map((l) => l.slice(0, 70));
   }
   if (lines.length === 0) lines = ["..."];
+  return lines;
+}
+
+interface FlowNodeProps {
+  step: AgentStep;
+  isActive?: boolean;
+  onClick?: () => void;
+}
+
+export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
+  var theme = STEP_THEME[step.type];
+  var lines = getLines(step);
+  var { displayedLines, done } = useTypewriterLines(lines, 18);
+
+  var contentTextClass = step.type === "code"
+    ? "text-step-code"
+    : step.type === "final_answer"
+    ? "text-step-final"
+    : "text-text-secondary";
+
+  var renderedLines = lines.map((_, i) => displayedLines[i] || "");
 
   return (
     <motion.div
@@ -50,41 +55,42 @@ export function FlowNode({ step, isActive, onClick }: FlowNodeProps) {
     >
       <div
         className="relative"
-        style={{ minWidth: step.type === "tool_call" ? 140 : 200 }}
+        style={{
+          minWidth: step.type === "tool_call" ? 140 : 200,
+          filter: isActive ? `drop-shadow(0 0 8px ${theme.hex})` : "none",
+          transition: "filter 0.2s ease",
+        }}
       >
         {/* Top border with label */}
-        <div className="flex items-center text-xs leading-none" style={{ color: config.color }}>
+        <div className={`flex items-center text-xs leading-none ${theme.text}`}>
           <span>╭── </span>
-          <span className="font-bold">{config.label}</span>
+          <span className="font-bold">{theme.label}</span>
           <span className="flex-1 overflow-hidden whitespace-nowrap">
             {" "}{"─".repeat(80)}
           </span>
           <span>╮</span>
         </div>
 
-        {/* Content lines */}
-        {lines.map((line, i) => (
-          <div key={i} className="flex text-xs leading-snug">
-            <span style={{ color: config.color }}>│</span>
-            <div className="flex-1 px-2 min-w-0">
-              <span
-                className="block truncate"
-                style={{
-                  color:
-                    step.type === "code"
-                      ? "var(--color-step-code)"
-                      : "var(--color-text-secondary)",
-                }}
-              >
-                {line}
-              </span>
+        {/* Content lines with tinted background */}
+        <div className={theme.bg}>
+          {renderedLines.map((line, i) => (
+            <div key={i} className="flex text-xs leading-snug">
+              <span className={theme.text}>│</span>
+              <div className="flex-1 px-2 min-w-0">
+                <span className={`block truncate ${contentTextClass}`}>
+                  {line}
+                  {!done && i === (displayedLines.length - 1) && (
+                    <span className={`cursor-blink ${theme.text}`}>_</span>
+                  )}
+                </span>
+              </div>
+              <span className={theme.text}>│</span>
             </div>
-            <span style={{ color: config.color }}>│</span>
-          </div>
-        ))}
+          ))}
+        </div>
 
         {/* Bottom border */}
-        <div className="flex items-center text-xs leading-none" style={{ color: config.color }}>
+        <div className={`flex items-center text-xs leading-none ${theme.text}`}>
           <span>╰</span>
           <span className="flex-1 overflow-hidden whitespace-nowrap">
             {"─".repeat(80)}

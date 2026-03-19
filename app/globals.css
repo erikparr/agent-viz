@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+
+  --color-bg-primary: #09090b;
+  --color-bg-surface: #18181b;
+  --color-bg-elevated: #27272a;
+  --color-border-accent: #f97316;
+  --color-border-muted: #78716c;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+
+  --color-step-thinking: #3b82f6;
+  --color-step-code: #22c55e;
+  --color-step-tool: #f97316;
+  --color-step-result: #a855f7;
+  --color-step-final: #f59e0b;
+  --color-step-error: #ef4444;
+}
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+}
+
+/* Terminal cursor blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}

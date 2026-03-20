@@ -34,27 +34,8 @@ body {
   animation: blink 1s step-end infinite;
 }
 
-/* Terminal-style scrollbar */
+/* Scrollbar — thin on Firefox, native overlay on webkit/macOS */
 .scrollbar-terminal {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border-accent) var(--color-bg-elevated);
-}
-
-.scrollbar-terminal::-webkit-scrollbar {
-  width: 6px;
-  -webkit-appearance: none;
-}
-
-.scrollbar-terminal::-webkit-scrollbar-track {
-  background: var(--color-bg-elevated);
-}
-
-.scrollbar-terminal::-webkit-scrollbar-thumb {
-  background: var(--color-border-accent);
-  border-radius: 3px;
-  min-height: 40px;
-}
-
-.scrollbar-terminal::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
+  scrollbar-color: var(--color-border-muted) transparent;
 }

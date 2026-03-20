@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./TerminalChrome";
 import { ContentBlock } from "./ContentBlock";
@@ -16,6 +16,8 @@ interface SidePanelProps {
 }
 
 export function SidePanel({ run, onSelectProject }: SidePanelProps) {
+  var [activeCategory, setActiveCategory] = useState<string | null>(null);
+
   var { contentIds, projectIds } = useMemo(() => {
     var seenContent = new Set<string>();
     var seenProject = new Set<string>();
@@ -42,6 +44,23 @@ export function SidePanel({ run, onSelectProject }: SidePanelProps) {
     return { contentIds: cIds, projectIds: pIds };
   }, [run.steps]);
 
+  // Derive categories from visible projects
+  var categories = useMemo(() => {
+    var cats = new Set<string>();
+    for (var id of projectIds) {
+      for (var cat of PROJECTS[id].categories) {
+        cats.add(cat);
+      }
+    }
+    return Array.from(cats).sort();
+  }, [projectIds]);
+
+  // Filter projects by active category
+  var filteredProjectIds = useMemo(() => {
+    if (!activeCategory) return projectIds;
+    return projectIds.filter((id) => PROJECTS[id].categories.includes(activeCategory!));
+  }, [projectIds, activeCategory]);
+
   if (contentIds.length === 0 && projectIds.length === 0) return null;
 
   return (
@@ -61,8 +80,37 @@ export function SidePanel({ run, onSelectProject }: SidePanelProps) {
       {projectIds.length > 0 && (
         <TerminalChrome title="Projects">
           <div className="space-y-3 max-h-[80vh] overflow-y-auto">
+            {/* Category filters */}
+            {categories.length > 1 && (
+              <div className="flex gap-1 flex-wrap pb-2 border-b border-border-muted">
+                <button
+                  onClick={() => setActiveCategory(null)}
+                  className={`text-[10px] px-2 py-1 border transition-colors focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none ${
+                    activeCategory === null
+                      ? "border-border-accent text-text-primary bg-bg-elevated"
+                      : "border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary"
+                  }`}
+                >
+                  All
+                </button>
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
+                    className={`text-[10px] px-2 py-1 border transition-colors focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none ${
+                      activeCategory === cat
+                        ? "border-border-accent text-text-primary bg-bg-elevated"
+                        : "border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <AnimatePresence>
-              {projectIds.map((id) => (
+              {filteredProjectIds.map((id) => (
                 <ProjectCard
                   key={id}
                   project={PROJECTS[id]}

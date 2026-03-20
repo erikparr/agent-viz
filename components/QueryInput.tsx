@@ -8,10 +8,9 @@ interface QueryInputProps {
 }
 
 const PRESET_QUERIES = [
-  "What projects has Erik worked on?",
+  "Explore Erik's project portfolio",
   "Show skills & capabilities overview",
   "What is Erik's experience with AI and agentic systems?",
-  "How does Erik bridge design and engineering?",
   "What tech stack does Erik work with?",
   "Describe Erik's most recent work",
 ];

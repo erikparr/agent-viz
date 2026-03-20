@@ -7,7 +7,7 @@ export interface DemoRun {
 
 export const DEMO_RUNS: DemoRun[] = [
   {
-    query: "What projects has Erik worked on?",
+    query: "Explore Erik's project portfolio",
     steps: [
       {
         type: "thinking",

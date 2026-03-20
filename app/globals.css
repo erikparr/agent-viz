@@ -33,3 +33,26 @@ body {
 .cursor-blink {
   animation: blink 1s step-end infinite;
 }
+
+/* Terminal-style scrollbar */
+.scrollbar-terminal {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-muted) transparent;
+}
+
+.scrollbar-terminal::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-terminal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-terminal::-webkit-scrollbar-thumb {
+  background: var(--color-border-muted);
+  border-radius: 2px;
+}
+
+.scrollbar-terminal::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-accent);
+}

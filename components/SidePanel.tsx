@@ -67,7 +67,7 @@ export function SidePanel({ run, onSelectProject }: SidePanelProps) {
     <div className="space-y-6">
       {contentIds.length > 0 && (
         <TerminalChrome title={CONTENT_BLOCKS[contentIds[0]].title}>
-          <div className="space-y-4 max-h-[80vh] overflow-y-auto scrollbar-terminal">
+          <div className="space-y-4">
             <AnimatePresence>
               {contentIds.map((id) => (
                 <ContentBlock key={id} block={CONTENT_BLOCKS[id]} />
@@ -79,7 +79,7 @@ export function SidePanel({ run, onSelectProject }: SidePanelProps) {
 
       {projectIds.length > 0 && (
         <TerminalChrome title="Projects">
-          <div className="space-y-3 max-h-[80vh] overflow-y-auto scrollbar-terminal">
+          <div className="space-y-3">
             {/* Category filters */}
             {categories.length > 1 && (
               <div className="flex gap-1 flex-wrap pb-2 border-b border-border-muted">

@@ -31,17 +31,22 @@ export default function Home() {
     <>
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
-      <main className={`relative z-10 max-w-7xl mx-auto px-4 py-8 space-y-6 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
-        <TerminalChrome title="erik parr — portfolio agent">
-          <QueryInput
-            onSubmit={startRun}
-            disabled={run?.status === "running"}
-          />
-        </TerminalChrome>
+      <div className={`relative z-10 flex flex-col h-screen max-w-7xl mx-auto px-4 py-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
+        {/* Header — fixed height */}
+        <div className="shrink-0 pb-4">
+          <TerminalChrome title="erik parr — portfolio agent">
+            <QueryInput
+              onSubmit={startRun}
+              disabled={run?.status === "running"}
+            />
+          </TerminalChrome>
+        </div>
 
+        {/* Content — fills remaining viewport */}
         {run && (
-          <div className={`flex gap-6 ${hasSideContent ? "flex-col lg:flex-row" : ""}`}>
-            <div className={hasSideContent ? "lg:w-3/5 min-w-0" : "w-full"}>
+          <div className={`flex gap-6 min-h-0 flex-1 ${hasSideContent ? "flex-col lg:flex-row" : ""}`}>
+            {/* Left column — agent flow */}
+            <div className={`${hasSideContent ? "lg:w-3/5" : "w-full"} min-h-0 overflow-y-auto scrollbar-terminal`}>
               <TerminalChrome title={`Run: ${run.query.slice(0, 50)}`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
@@ -74,14 +79,15 @@ export default function Home() {
               </TerminalChrome>
             </div>
 
+            {/* Right column — side panel */}
             {hasSideContent && (
-              <div className="lg:w-2/5 min-w-0">
+              <div className="lg:w-2/5 min-h-0 overflow-y-auto scrollbar-terminal">
                 <SidePanel run={run} onSelectProject={setSelectedProject} />
               </div>
             )}
           </div>
         )}
-      </main>
+      </div>
 
       <ProjectModal
         project={selectedProject}

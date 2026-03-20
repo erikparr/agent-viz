@@ -9,8 +9,20 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Erik Parr — Portfolio Agent",
-  description: "Agentic portfolio for Erik Parr — ask about projects, skills, and experience",
+  title: "Erik Parr — Design Technologist",
+  description: "Building Agentic Systems for Interactive Products. Portfolio of Erik Parr — product prototyping, systems design, AI-driven tools.",
+  metadataBase: new URL("https://design.erikparr.com"),
+  openGraph: {
+    title: "Erik Parr — Design Technologist",
+    description: "Building Agentic Systems for Interactive Products",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary",
+    title: "Erik Parr — Design Technologist",
+    description: "Building Agentic Systems for Interactive Products",
+  },
 };
 
 export default function RootLayout({

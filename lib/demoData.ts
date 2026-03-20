@@ -479,4 +479,47 @@ print(foam)`,
       },
     ],
   },
+  {
+    query: "Show resume",
+    steps: [
+      {
+        type: "thinking",
+        stepNumber: 1,
+        timestamp: 0,
+        thought: "I'll retrieve Erik's full resume — work history, education, and recognition.",
+      },
+      {
+        type: "code",
+        stepNumber: 2,
+        timestamp: 600,
+        code: `resume = get_resume()
+print(resume.summary)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 3,
+        timestamp: 900,
+        toolCall: {
+          name: "get_resume",
+          arguments: {},
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 4,
+        timestamp: 2000,
+        toolResult: {
+          output: "Erik Parr — Design Technologist. 15 years building interactive systems end-to-end. Key roles: Intuitive Surgical (2025–Present), Extrasensory Studio founder (2024–Present), Indigo Slate (2023–2025), Valtech (2019–2023), Kram/Weisshaar (2017–2018), Studio Erik Parr (2012–2022). Education: MA from Aalto Helsinki, BFA/BA from University of Washington. Shipped products, permanent installations, international exhibitions and residencies.",
+          success: true,
+        },
+        contentRefs: ["resume"],
+      },
+      {
+        type: "final_answer",
+        stepNumber: 5,
+        timestamp: 3500,
+        finalAnswer: "Erik Parr is a Design Technologist with 15 years building interactive systems from prototype through production.\n\nCurrently at Intuitive Surgical building AI-powered surgical video prototypes, and running Extrasensory Studio where he shipped FOAM (commercial audio product). Previously Senior Design Technologist at Indigo Slate and Valtech, with earlier roles at Kram/Weisshaar, The Office for Creative Research, and the Icelandic Institute for Intelligent Machines.\n\nHolds an MA from Aalto School of Arts (Helsinki) and BFA/BA from University of Washington.\n\nNotable: permanent installations at Microsoft Cybercrime Center and Adidas HQ, exhibitions at Barbican Center London, and grants from Kone Foundation and Alt-w New Media Scotland.\n\nSee the panel for full experience, education, and recognition details.",
+      },
+    ],
+  },
 ];

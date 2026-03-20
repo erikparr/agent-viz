@@ -13,6 +13,7 @@ const PRESET_QUERIES = [
   "What is Erik's experience with AI and agentic systems?",
   "What tech stack does Erik work with?",
   "Describe Erik's most recent work",
+  "Show resume",
 ];
 
 export function QueryInput({ onSubmit, disabled }: QueryInputProps) {

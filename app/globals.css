@@ -34,25 +34,28 @@ body {
   animation: blink 1s step-end infinite;
 }
 
-/* Terminal-style scrollbar */
+/* Terminal-style scrollbar — always visible */
 .scrollbar-terminal {
+  overflow-y: scroll !important;
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border-muted) transparent;
+  scrollbar-color: var(--color-border-accent) var(--color-bg-elevated);
 }
 
 .scrollbar-terminal::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
+  -webkit-appearance: none;
 }
 
 .scrollbar-terminal::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-bg-elevated);
 }
 
 .scrollbar-terminal::-webkit-scrollbar-thumb {
-  background: var(--color-border-muted);
-  border-radius: 2px;
+  background: var(--color-border-accent);
+  border-radius: 3px;
+  min-height: 40px;
 }
 
 .scrollbar-terminal::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-accent);
+  background: var(--color-text-secondary);
 }

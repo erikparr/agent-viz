@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ProjectMedia } from "./ProjectMedia";
 import type { Project } from "@/lib/portfolioData";
 
 interface ProjectCardProps {
@@ -20,17 +21,12 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
       tabIndex={0}
       className="cursor-pointer group focus-visible:outline-none"
     >
-      <div className="border border-border-muted hover:border-border-accent focus-visible:border-border-accent transition-colors">
-        {/* Image */}
-        <div className="relative aspect-video overflow-hidden bg-bg-surface">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-          />
-        </div>
+      <div className="border border-border-muted hover:border-border-accent transition-colors">
+        <ProjectMedia
+          project={project}
+          className="aspect-video opacity-80 group-hover:opacity-100 transition-opacity"
+        />
 
-        {/* Content */}
         <div className="p-3 space-y-2">
           <h3 className="text-xs font-bold text-text-primary">{project.title}</h3>
 
@@ -38,7 +34,6 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
             {project.description}
           </p>
 
-          {/* Categories */}
           <div className="flex flex-wrap gap-1">
             {project.categories.map((cat) => (
               <span

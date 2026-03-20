@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./TerminalChrome";
+import { ProjectMedia } from "./ProjectMedia";
 import type { Project } from "@/lib/portfolioData";
 
 interface ProjectModalProps {
@@ -40,10 +41,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           onClick={onClose}
         >
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-black/80" />
 
-          {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -54,7 +53,6 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           >
             <TerminalChrome title="Project Detail">
               <div className="space-y-4">
-                {/* Close button */}
                 <div className="flex justify-end">
                   <button
                     onClick={onClose}
@@ -64,32 +62,24 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   </button>
                 </div>
 
-                {/* Image */}
-                <div className="relative aspect-video overflow-hidden bg-bg-surface border border-border-muted">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <ProjectMedia
+                  project={project}
+                  className={`border border-border-muted ${project.mediaType === "foam3d" ? "aspect-[16/9] min-h-[300px]" : "aspect-video"}`}
+                />
 
-                {/* Title */}
                 <h2 className="text-sm font-bold text-text-primary uppercase tracking-wide">
                   {project.title}
                 </h2>
 
-                {/* Roles */}
                 <div className="text-xs text-text-secondary">
                   <span className="text-border-accent">roles:</span>{" "}
                   {project.roles.join(", ")}
                 </div>
 
-                {/* Description */}
                 <p className="text-xs leading-relaxed text-text-primary">
                   {project.description}
                 </p>
 
-                {/* Categories + Link */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-1.5">
                     {project.categories.map((cat) => (

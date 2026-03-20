@@ -5,13 +5,15 @@ import { AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./TerminalChrome";
 import { ProjectCard } from "./ProjectCard";
 import { PROJECTS } from "@/lib/portfolioData";
+import type { Project } from "@/lib/portfolioData";
 import type { AgentRun } from "@/lib/types";
 
 interface ProjectPanelProps {
   run: AgentRun;
+  onSelectProject: (project: Project) => void;
 }
 
-export function ProjectPanel({ run }: ProjectPanelProps) {
+export function ProjectPanel({ run, onSelectProject }: ProjectPanelProps) {
   var projectIds = useMemo(() => {
     var seen = new Set<string>();
     var ids: string[] = [];
@@ -35,7 +37,11 @@ export function ProjectPanel({ run }: ProjectPanelProps) {
       <div className="space-y-3 max-h-[80vh] overflow-y-auto">
         <AnimatePresence>
           {projectIds.map((id) => (
-            <ProjectCard key={id} project={PROJECTS[id]} />
+            <ProjectCard
+              key={id}
+              project={PROJECTS[id]}
+              onClick={() => onSelectProject(PROJECTS[id])}
+            />
           ))}
         </AnimatePresence>
       </div>

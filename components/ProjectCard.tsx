@@ -5,17 +5,22 @@ import type { Project } from "@/lib/portfolioData";
 
 interface ProjectCardProps {
   project: Project;
+  onClick: () => void;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, onClick }: ProjectCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 8 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="group"
+      onClick={onClick}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } }}
+      role="button"
+      tabIndex={0}
+      className="cursor-pointer group focus-visible:outline-none"
     >
-      <div className="border border-border-muted hover:border-border-accent transition-colors">
+      <div className="border border-border-muted hover:border-border-accent focus-visible:border-border-accent transition-colors">
         {/* Image */}
         <div className="relative aspect-video overflow-hidden bg-bg-surface">
           <img
@@ -27,21 +32,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Content */}
         <div className="p-3 space-y-2">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="text-xs font-bold text-text-primary">{project.title}</h3>
-            {project.link && (
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-step-tool text-[10px] hover:underline shrink-0"
-              >
-                [link]
-              </a>
-            )}
-          </div>
+          <h3 className="text-xs font-bold text-text-primary">{project.title}</h3>
 
-          <p className="text-[10px] leading-relaxed text-text-secondary line-clamp-3">
+          <p className="text-[10px] leading-relaxed text-text-secondary line-clamp-2">
             {project.description}
           </p>
 

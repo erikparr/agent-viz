@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { CrosshatchBackground } from "@/components/CrosshatchBackground";
 import { TerminalChrome } from "@/components/TerminalChrome";
 import { QueryInput } from "@/components/QueryInput";
 import { AgentFlow } from "@/components/AgentFlow";
 import { ProjectPanel } from "@/components/ProjectPanel";
+import { ProjectModal } from "@/components/ProjectModal";
 import { useAgentStream } from "@/hooks/useAgentStream";
+import type { Project } from "@/lib/portfolioData";
 
 export default function Home() {
   var { run, startRun, reset } = useAgentStream();
+  var [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   var statusClass = run?.status === "running"
     ? "text-step-code"
@@ -19,12 +23,13 @@ export default function Home() {
     : "text-text-secondary";
 
   var hasProjects = run?.steps.some((s) => s.projectRefs && s.projectRefs.length > 0);
+  var modalOpen = selectedProject !== null;
 
   return (
     <>
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <main className={`relative z-10 max-w-7xl mx-auto px-4 py-8 space-y-6 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
         <TerminalChrome title="erik parr — portfolio agent">
           <QueryInput
             onSubmit={startRun}
@@ -34,7 +39,6 @@ export default function Home() {
 
         {run && (
           <div className={`flex gap-6 ${hasProjects ? "flex-col lg:flex-row" : ""}`}>
-            {/* Agent flow — left/main column */}
             <div className={hasProjects ? "lg:w-3/5 min-w-0" : "w-full"}>
               <TerminalChrome title={`Run: ${run.query.slice(0, 50)}`}>
                 <div className="space-y-3">
@@ -68,15 +72,19 @@ export default function Home() {
               </TerminalChrome>
             </div>
 
-            {/* Project panel — right column */}
             {hasProjects && (
               <div className="lg:w-2/5 min-w-0">
-                <ProjectPanel run={run} />
+                <ProjectPanel run={run} onSelectProject={setSelectedProject} />
               </div>
             )}
           </div>
         )}
       </main>
+
+      <ProjectModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </>
   );
 }

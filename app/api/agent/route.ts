@@ -56,8 +56,14 @@ function streamAgentRun(query: string) {
 }
 
 export async function POST(req: Request) {
-  var { query } = await req.json();
+  var { query, isPreset } = await req.json();
 
+  // Presets always use fast demo data
+  if (isPreset) {
+    return streamDemoRun(query);
+  }
+
+  // Typed queries use real agent if API key available, else demo fallback
   if (!process.env.ANTHROPIC_API_KEY) {
     return streamDemoRun(query);
   }

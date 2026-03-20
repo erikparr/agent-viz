@@ -7,7 +7,7 @@ export function useAgentStream() {
   var [run, setRun] = useState<AgentRun | null>(null);
   var abortRef = useRef<AbortController | null>(null);
 
-  var startRun = useCallback((query: string) => {
+  var startRun = useCallback((query: string, isPreset?: boolean) => {
     // Abort any existing run
     if (abortRef.current) abortRef.current.abort();
 
@@ -20,7 +20,7 @@ export function useAgentStream() {
     fetch("/api/agent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query, isPreset: !!isPreset }),
       signal: controller.signal,
     })
       .then(async (res) => {

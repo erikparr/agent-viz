@@ -15,6 +15,7 @@ export interface AgentStep {
   };
   finalAnswer?: string;
   projectRefs?: string[];
+  contentRefs?: string[];
 }
 
 export interface AgentRun {

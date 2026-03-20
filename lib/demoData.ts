@@ -102,6 +102,49 @@ Installation / Art:
     ],
   },
   {
+    query: "Show skills & capabilities overview",
+    steps: [
+      {
+        type: "thinking",
+        stepNumber: 1,
+        timestamp: 0,
+        thought: "I'll retrieve Erik's core capabilities and design philosophy from his portfolio profile.",
+      },
+      {
+        type: "code",
+        stepNumber: 2,
+        timestamp: 600,
+        code: `profile = get_profile("skills, capabilities, philosophy")
+print(profile)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 3,
+        timestamp: 900,
+        toolCall: {
+          name: "get_profile",
+          arguments: { sections: "skills, capabilities, philosophy" },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 4,
+        timestamp: 2200,
+        toolResult: {
+          output: "Profile tagline: 'Building Agentic Systems for Interactive Products.' Four core capability areas: (1) Agentic Systems for Product Development — AI-augmented workflows, maintaining product vision through implementation, reducing handoff overhead. (2) Continuous Prototyping + User Testing — creative ideation, high-fidelity prototypes, rapid iteration, bridging design intent to shipped product. (3) Complex Tools & AI-Native Products — multi-panel data-dense interfaces, agentic/conversational UI, designing for uncertainty. (4) Bridge Design and Engineering — 10+ years full-stack, API/system architecture literacy, prototypes that become production code.",
+          success: true,
+        },
+        contentRefs: ["skills"],
+      },
+      {
+        type: "final_answer",
+        stepNumber: 5,
+        timestamp: 3500,
+        finalAnswer: "Erik's capabilities center on four areas:\n\nAgentic Systems for Product Development — designing AI-augmented workflows that accelerate the design-to-production cycle while keeping product vision intact.\n\nContinuous Prototyping + User Testing — owning creative ideation, building high-fidelity prototypes that validate before production, and rapid iteration informed by user feedback.\n\nComplex Tools & AI-Native Products — interaction design for data-dense interfaces, agentic and conversational UI patterns, and designing for the uncertainty inherent in AI-driven workflows.\n\nBridge Design and Engineering — over 10 years as a full-stack engineer with API design and system architecture literacy. His prototypes become production code.\n\nHe works best embedded in product teams building complex tools or AI-native systems — specifically where the gap between design intent and shipped product is where things typically break.",
+      },
+    ],
+  },
+  {
     query: "What is Erik's experience with AI and agentic systems?",
     steps: [
       {
@@ -275,6 +318,7 @@ print(skills)`,
           output: "Frontend: React, Next.js, Vue/Nuxt, TypeScript, Tailwind CSS, Three.js, WebGL/Shaders, Framer Motion. Backend: Node.js, Python, C++ (JUCE/openFrameworks). AI/ML: LangChain, OpenAI API, Stability AI, Claude API, Figma MCP. 3D/XR: Three.js, Unity3D, WebXR, ARKit, 8th Wall. Physical computing: Arduino, custom circuit design, mechatronics. Infrastructure: Vercel, Firebase, Railway, Stripe, CI/CD pipelines. Design: Figma, Tokens Studio, design systems, WCAG accessibility.",
           success: true,
         },
+        contentRefs: ["techstack"],
       },
       {
         type: "final_answer",

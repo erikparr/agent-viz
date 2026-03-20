@@ -5,7 +5,7 @@ import { CrosshatchBackground } from "@/components/CrosshatchBackground";
 import { TerminalChrome } from "@/components/TerminalChrome";
 import { QueryInput } from "@/components/QueryInput";
 import { AgentFlow } from "@/components/AgentFlow";
-import { ProjectPanel } from "@/components/ProjectPanel";
+import { SidePanel } from "@/components/SidePanel";
 import { ProjectModal } from "@/components/ProjectModal";
 import { useAgentStream } from "@/hooks/useAgentStream";
 import type { Project } from "@/lib/portfolioData";
@@ -22,7 +22,9 @@ export default function Home() {
     ? "text-step-error"
     : "text-text-secondary";
 
-  var hasProjects = run?.steps.some((s) => s.projectRefs && s.projectRefs.length > 0);
+  var hasSideContent = run?.steps.some(
+    (s) => (s.projectRefs && s.projectRefs.length > 0) || (s.contentRefs && s.contentRefs.length > 0)
+  );
   var modalOpen = selectedProject !== null;
 
   return (
@@ -38,8 +40,8 @@ export default function Home() {
         </TerminalChrome>
 
         {run && (
-          <div className={`flex gap-6 ${hasProjects ? "flex-col lg:flex-row" : ""}`}>
-            <div className={hasProjects ? "lg:w-3/5 min-w-0" : "w-full"}>
+          <div className={`flex gap-6 ${hasSideContent ? "flex-col lg:flex-row" : ""}`}>
+            <div className={hasSideContent ? "lg:w-3/5 min-w-0" : "w-full"}>
               <TerminalChrome title={`Run: ${run.query.slice(0, 50)}`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
@@ -72,9 +74,9 @@ export default function Home() {
               </TerminalChrome>
             </div>
 
-            {hasProjects && (
+            {hasSideContent && (
               <div className="lg:w-2/5 min-w-0">
-                <ProjectPanel run={run} onSelectProject={setSelectedProject} />
+                <SidePanel run={run} onSelectProject={setSelectedProject} />
               </div>
             )}
           </div>

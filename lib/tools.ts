@@ -98,7 +98,7 @@ function searchPortfolio(
 ): { output: string; projectRefs: string[] } {
   var q = query.toLowerCase();
   var words = q.split(/\s+/).filter((w) => w.length > 2);
-  var results: Project[] = [];
+  var results: { project: Project; score: number }[] = [];
 
   for (var project of Object.values(PROJECTS)) {
     var matchesCategory =
@@ -106,26 +106,31 @@ function searchPortfolio(
 
     var searchText = `${project.title} ${project.description} ${project.roles.join(" ")} ${project.categories.join(" ")}`.toLowerCase();
 
-    // Match if ANY search word appears in the project text
-    var matchesQuery = words.some((w) => searchText.includes(w));
+    // Score by how many search words appear in the project text
+    var matchCount = words.filter((w) => searchText.includes(w)).length;
+    var matchesQuery = matchCount > 0;
 
     // Broad queries that should return everything
     var isBroadQuery = ["all", "projects", "portfolio", "everything", "list", "show", "recent"].some((w) => q.includes(w));
 
     if (matchesCategory && (matchesQuery || isBroadQuery)) {
-      results.push(project);
+      results.push({ project, score: isBroadQuery ? 1 : matchCount });
     }
   }
 
-  var projectRefs = results.map((p) => p.id);
-  var output = results.length === 0
+  // Sort by relevance score, limit to top 10
+  results.sort((a, b) => b.score - a.score);
+  var topResults = results.slice(0, 10);
+
+  var projectRefs = topResults.map((r) => r.project.id);
+  var output = topResults.length === 0
     ? `No projects found matching "${query}"${category ? ` in category ${category}` : ""}.`
-    : results
-        .map((p) => `${p.id}: ${p.title} — ${p.description.slice(0, 120)}... [${p.categories.join(", ")}]`)
+    : topResults
+        .map((r) => `${r.project.id}: ${r.project.title} — ${r.project.description.slice(0, 120)}... [${r.project.categories.join(", ")}]`)
         .join("\n\n");
 
   return {
-    output: `Found ${results.length} projects:\n\n${output}`,
+    output: `Found ${topResults.length} projects:\n\n${output}`,
     projectRefs,
   };
 }

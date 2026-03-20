@@ -145,6 +145,82 @@ print(profile)`,
     ],
   },
   {
+    query: "How does Erik bridge design and engineering?",
+    steps: [
+      {
+        type: "thinking",
+        stepNumber: 1,
+        timestamp: 0,
+        thought: "This is about his hybrid role — I need to find examples where design and engineering overlap in his work.",
+      },
+      {
+        type: "code",
+        stepNumber: 2,
+        timestamp: 700,
+        code: `profile = get_profile("design engineering bridge")
+projects = search_portfolio("design + engineering overlap")
+print(profile, projects)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 3,
+        timestamp: 1000,
+        toolCall: {
+          name: "search_portfolio",
+          arguments: { query: "design engineering hybrid shipped production" },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 4,
+        timestamp: 2200,
+        toolResult: {
+          output: "Profile states: 'product designer with deep software engineering fluency.' Key bridge evidence: (1) FOAM — designed the product AND built the full async pipeline (TTS, phoneme alignment, job queues, payments). Concept to launch in 3 weeks. (2) VEX — designed the UX AND wrote the C++/React hybrid architecture achieving sub-10ms latency. (3) Intuitive Surgical — sole design engineer, prototypes that link to production systems. (4) Design System case study — built bidirectional Figma-to-code pipeline in 1 day using Claude Code orchestration. (5) This portfolio site itself — an agentic interface he designed and built.",
+          success: true,
+        },
+        projectRefs: ["foam", "extrasensory", "intuitive", "designsystem"],
+      },
+      {
+        type: "thinking",
+        stepNumber: 5,
+        timestamp: 2800,
+        thought: "The pattern is clear — he doesn't hand off designs to engineers. His prototypes become production code. Let me also check his infrastructure work.",
+      },
+      {
+        type: "code",
+        stepNumber: 6,
+        timestamp: 3300,
+        code: `infra = get_skills("systems, infrastructure, deployment")
+print(infra)`,
+      },
+      {
+        type: "tool_call",
+        stepNumber: 7,
+        timestamp: 3600,
+        toolCall: {
+          name: "get_skills",
+          arguments: { category: "systems infrastructure" },
+        },
+      },
+      {
+        type: "tool_result",
+        stepNumber: 8,
+        timestamp: 4400,
+        toolResult: {
+          output: "Systems skills: API design and multi-service orchestration, async job queues and event-driven architectures, CI/CD pipelines and cross-platform deployment, payment integration and webhook handlers. These aren't typical designer skills — they indicate someone who owns the full stack from pixel to production.",
+          success: true,
+        },
+        contentRefs: ["skills"],
+      },
+      {
+        type: "final_answer",
+        stepNumber: 9,
+        timestamp: 5500,
+        finalAnswer: "Erik doesn't hand off designs to engineers — his prototypes become production code. This is the core of how he bridges the two disciplines:\n\nAt Intuitive Surgical, he's the sole design engineer on an advanced product team. He designs the interfaces AND builds the working prototypes that connect to real system data.\n\nWith FOAM, he designed the product concept and then personally built the entire backend: async TTS pipeline, forced phoneme alignment, job queues, Stripe webhooks, automated error recovery. Concept to shipped product in 3 weeks.\n\nFor VEX, he designed the UX and wrote the hybrid C++/React architecture that achieves sub-10ms audio latency with sample-accurate MIDI timing.\n\nHe built a full bidirectional design system pipeline (Figma to Next.js and back) in a single day using Claude Code as the orchestration layer.\n\nThe result: zero handoff overhead, no 'lost in translation' between design and implementation. He works best where that gap is usually where things break.",
+      },
+    ],
+  },
+  {
     query: "What is Erik's experience with AI and agentic systems?",
     steps: [
       {

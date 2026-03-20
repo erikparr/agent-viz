@@ -34,9 +34,8 @@ body {
   animation: blink 1s step-end infinite;
 }
 
-/* Terminal-style scrollbar — always visible */
+/* Terminal-style scrollbar */
 .scrollbar-terminal {
-  overflow-y: scroll !important;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-accent) var(--color-bg-elevated);
 }

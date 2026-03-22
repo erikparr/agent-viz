@@ -13,14 +13,16 @@ interface MobileAgentFlowProps {
 
 export function MobileAgentFlow({ run }: MobileAgentFlowProps) {
   var [currentIndex, setCurrentIndex] = useState(0);
-  var [flippedIndex, setFlippedIndex] = useState<number | null>(null);
+  var [flipped, setFlipped] = useState(false);
+  var [direction, setDirection] = useState(0);
   var prevStepCount = useRef(run.steps.length);
 
   // Auto-advance to newest step when new steps arrive
   useEffect(() => {
     if (run.steps.length > prevStepCount.current) {
+      setDirection(1);
       setCurrentIndex(run.steps.length - 1);
-      setFlippedIndex(null);
+      setFlipped(false);
     }
     prevStepCount.current = run.steps.length;
   }, [run.steps.length]);
@@ -35,55 +37,54 @@ export function MobileAgentFlow({ run }: MobileAgentFlowProps) {
   var steps = run.steps;
   if (steps.length === 0) return null;
 
-  var isFlipped = flippedIndex === currentIndex;
+  function navigate(newIndex: number) {
+    setDirection(newIndex > currentIndex ? 1 : -1);
+    setCurrentIndex(newIndex);
+    setFlipped(false);
+  }
 
   function handleDragEnd(_: any, info: { offset: { x: number; y: number } }) {
     var swipeThreshold = 50;
     if (info.offset.x < -swipeThreshold && currentIndex < steps.length - 1) {
-      setFlippedIndex(null);
-      setCurrentIndex(currentIndex + 1);
+      navigate(currentIndex + 1);
     } else if (info.offset.x > swipeThreshold && currentIndex > 0) {
-      setFlippedIndex(null);
-      setCurrentIndex(currentIndex - 1);
+      navigate(currentIndex - 1);
     }
   }
 
-  function handleTap() {
-    setFlippedIndex(flippedIndex === currentIndex ? null : currentIndex);
-  }
+  var slideVariants = {
+    enter: (dir: number) => ({ x: dir > 0 ? 200 : -200, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir > 0 ? -200 : 200, opacity: 0 }),
+  };
 
   return (
     <div className="space-y-3">
       {/* Carousel container */}
-      <div
-        className="relative overflow-hidden"
-        style={{ perspective: "1000px" }}
-      >
+      <div className="relative overflow-hidden">
         <motion.div
-          key={currentIndex}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.2}
           onDragEnd={handleDragEnd}
-          onTap={handleTap}
           className="touch-pan-y"
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" custom={direction}>
             <motion.div
-              key={`${currentIndex}-${isFlipped ? "back" : "front"}`}
-              initial={{ rotateY: isFlipped ? -90 : 90 }}
-              animate={{ rotateY: 0 }}
-              exit={{ rotateY: isFlipped ? 90 : -90 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              style={{ transformStyle: "preserve-3d" }}
+              key={`${currentIndex}-${flipped}`}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              onClick={() => setFlipped(!flipped)}
             >
-              {isFlipped ? (
-                <div className="min-h-[120px]">
-                  <StepDetail
-                    step={steps[currentIndex]}
-                    onClose={() => setFlippedIndex(null)}
-                  />
-                </div>
+              {flipped ? (
+                <StepDetail
+                  step={steps[currentIndex]}
+                  onClose={() => setFlipped(false)}
+                />
               ) : (
                 <FlowNode
                   step={steps[currentIndex]}
@@ -102,10 +103,7 @@ export function MobileAgentFlow({ run }: MobileAgentFlowProps) {
         {steps.map((step, i) => (
           <button
             key={i}
-            onClick={() => {
-              setCurrentIndex(i);
-              setFlippedIndex(null);
-            }}
+            onClick={() => navigate(i)}
             aria-label={`Go to step ${i + 1}`}
             className="p-1 focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none"
           >
@@ -127,7 +125,7 @@ export function MobileAgentFlow({ run }: MobileAgentFlowProps) {
           {STEP_THEME[steps[currentIndex].type].label}
         </span>
         <span className="text-border-muted ml-2">
-          {isFlipped ? "(tap to flip back)" : "(tap for detail)"}
+          {flipped ? "(tap to flip back)" : "(tap for detail)"}
         </span>
       </div>
 

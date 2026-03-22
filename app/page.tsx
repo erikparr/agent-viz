@@ -31,7 +31,7 @@ export default function Home() {
     <>
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
-      <div className={`relative z-10 flex flex-col h-screen max-w-7xl mx-auto px-4 py-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
+      <div className={`relative z-10 flex flex-col min-h-screen lg:h-screen max-w-7xl mx-auto px-4 py-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
         {/* Header — fixed height */}
         <div className="shrink-0 pb-4">
           <TerminalChrome title="erik parr — portfolio agent">
@@ -44,9 +44,9 @@ export default function Home() {
 
         {/* Content — fills remaining viewport */}
         {run && (
-          <div className={`flex gap-6 min-h-0 flex-1 ${hasSideContent ? "flex-col lg:flex-row" : ""}`}>
+          <div className={`flex gap-6 lg:min-h-0 flex-1 ${hasSideContent ? "flex-col lg:flex-row" : ""}`}>
             {/* Left column — agent flow */}
-            <div className={`${hasSideContent ? "lg:w-3/5" : "w-full"} min-h-0 overflow-y-auto scrollbar-terminal`}>
+            <div className={`${hasSideContent ? "lg:w-3/5" : "w-full"} lg:min-h-0 lg:overflow-y-auto scrollbar-terminal`}>
               <TerminalChrome title={`Run: ${run.query.slice(0, 50)}`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
@@ -81,7 +81,7 @@ export default function Home() {
 
             {/* Right column — side panel */}
             {hasSideContent && (
-              <div className="lg:w-2/5 min-h-0 overflow-y-auto scrollbar-terminal">
+              <div className="lg:w-2/5 lg:min-h-0 lg:overflow-y-auto scrollbar-terminal">
                 <SidePanel run={run} onSelectProject={setSelectedProject} />
               </div>
             )}

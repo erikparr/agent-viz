@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { FlowNode } from "./FlowNode";
 import { StepDetail } from "./StepDetail";
+import { MobileAgentFlow } from "./MobileAgentFlow";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { AgentRun } from "@/lib/types";
 
 interface AgentFlowProps {
@@ -12,6 +14,11 @@ interface AgentFlowProps {
 export function AgentFlow({ run }: AgentFlowProps) {
   var [selectedStep, setSelectedStep] = useState<number | null>(null);
   var selected = selectedStep !== null ? run.steps[selectedStep] : null;
+  var isMobile = useMediaQuery("(max-width: 1023px)");
+
+  if (isMobile === true) {
+    return <MobileAgentFlow run={run} />;
+  }
 
   return (
     <div className="space-y-4">

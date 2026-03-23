@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const mono = JetBrains_Mono({
@@ -34,6 +35,7 @@ export default function RootLayout({
     <html lang="en" className={`dark ${mono.variable}`}>
       <body className="min-h-screen antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );

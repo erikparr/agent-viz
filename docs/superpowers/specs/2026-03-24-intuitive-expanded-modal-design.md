@@ -51,15 +51,16 @@ Ran a human factors study with a surgeon panel. Core assumptions confirmed. Pres
 
 ## Rendering changes in ProjectModal.tsx
 
-When `project.details` exists, render after the existing description:
+When `project.details` exists, render between the existing description and the categories/link row:
 
 - Each detail section: heading + body paragraph
-- Heading: small caps or accent-colored, matching existing `text-border-accent` pattern
-- Body: `text-xs leading-relaxed text-text-secondary` for readable prose
-- Subtle `border-t border-border-muted` between sections for visual rhythm
+- Heading: accent-colored using `text-border-accent`, matching the existing "roles:" label style
+- Body: `text-xs leading-relaxed text-text-primary` (same as existing description, since detail sections contain the most substantive content)
+- `border-t border-border-muted` before the first detail section to separate from the short description
+- `border-t border-border-muted` between subsequent sections for visual rhythm
 - No bullets, no icons, no bold inline headers
 
-The existing short `description` stays as-is for card preview (line-clamped to 2 lines in ProjectCard). The `details` array only appears in the expanded modal.
+The existing short `description` stays as-is for card preview (line-clamped to 2 lines in ProjectCard). The `details` array only appears in the expanded modal. The modal already scrolls via `max-h-[90vh] overflow-y-auto`, so the added content length is handled.
 
 ## Files changed
 

@@ -48,7 +48,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-4xl max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <TerminalChrome title="Project Detail">
@@ -79,6 +79,24 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <p className="text-xs leading-relaxed text-text-primary">
                   {project.description}
                 </p>
+
+                {project.details && (
+                  <div className="space-y-0">
+                    {project.details.map((detail) => (
+                      <div
+                        key={detail.heading}
+                        className="border-t border-border-muted pt-3 mt-3"
+                      >
+                        <h3 className="text-[10px] font-bold text-border-accent uppercase tracking-wide mb-1.5">
+                          {detail.heading}
+                        </h3>
+                        <p className="text-xs leading-relaxed text-text-primary">
+                          {detail.body}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-1.5">

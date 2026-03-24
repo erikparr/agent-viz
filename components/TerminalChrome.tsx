@@ -14,40 +14,15 @@ export function TerminalChrome({
   className = "",
 }: TerminalChromeProps) {
   return (
-    <div className={`relative ${className}`}>
-      {/* Top border with title */}
-      <div className={`flex items-center gap-0 text-sm ${colorClass}`}>
-        <span>╭</span>
-        {title && (
-          <>
-            <span>── </span>
-            <span className="px-1">{title}</span>
-            <span> ─</span>
-          </>
-        )}
-        <span className="flex-1 overflow-hidden whitespace-nowrap">
-          {"─".repeat(200)}
-        </span>
-        <span>╮</span>
+    <fieldset className={`relative border border-border-accent p-0 flex flex-col max-h-[90vh] ${className}`}>
+      {title && (
+        <legend className={`ml-4 px-2 text-sm ${colorClass}`}>
+          {title}
+        </legend>
+      )}
+      <div className="px-4 py-3 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-500 [&::-webkit-scrollbar-thumb]:rounded-none">
+        {children}
       </div>
-
-      {/* Content with side borders */}
-      <div className="flex">
-        <span className={`text-sm ${colorClass}`}>│</span>
-        <div className="flex-1 min-w-0 px-3 py-2">
-          {children}
-        </div>
-        <span className={`text-sm ${colorClass}`}>│</span>
-      </div>
-
-      {/* Bottom border */}
-      <div className={`flex items-center text-sm ${colorClass}`}>
-        <span>╰</span>
-        <span className="flex-1 overflow-hidden whitespace-nowrap">
-          {"─".repeat(200)}
-        </span>
-        <span>╯</span>
-      </div>
-    </div>
+    </fieldset>
   );
 }

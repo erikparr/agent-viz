@@ -1,3 +1,8 @@
+export interface ProjectDetail {
+  heading: string;
+  body: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -7,6 +12,7 @@ export interface Project {
   mediaType: "image" | "vimeo" | "foam3d";
   mediaContent: string | string[];
   link?: string;
+  details?: ProjectDetail[];
 }
 
 export const PROJECTS: Record<string, Project> = {
@@ -18,6 +24,28 @@ export const PROJECTS: Record<string, Project> = {
     categories: ["AI", "Interactive"],
     mediaType: "image",
     mediaContent: "/images/intuitive.png",
+    details: [
+      {
+        heading: "Context",
+        body: "I was the sole design technologist in Intuitive's Advanced Product Design group, working on problems 2-3 years ahead of shipping product. The challenge: surgeons produce huge volumes of data per procedure (video, instrument telemetry, system events) and have no good way to learn from any of it post-op. Everything was built locally under HIPAA constraints. The research that would eventually define what this product category even was hadn't been published yet, so requirements had to be invented alongside the science.",
+      },
+      {
+        heading: "3D surgical tool path visualization",
+        body: "Real-time 3D rendering of robotic instrument paths in Three.js. For the first time you could actually see how a surgeon's technique plays out spatially: where instruments went, how much force was applied, how movement tracks against procedure phase.",
+      },
+      {
+        heading: "AI case summarization",
+        body: "A local LLM system that turns structured surgical data into plain-language case summaries. ML segmentation breaks each procedure into phases, tasks, and steps. Surgeons can read what happened instead of parsing raw data.",
+      },
+      {
+        heading: "Adaptive case explorer",
+        body: "A year-long prototype that watches for unusual patterns in a procedure and pulls up the relevant data on its own, alongside historical comparisons, without anyone asking for it. Adapts to individual usage patterns over time. The core bet that held up through the whole project: users don't want all the data, they want the parts that matter.",
+      },
+      {
+        heading: "Outcomes",
+        body: "Ran a human factors study with a surgeon panel. Core assumptions confirmed. Presented to upper management; received well. Product requirements were defined from research that was still being published during the build.",
+      },
+    ],
   },
   agentic3d: {
     id: "agentic3d",

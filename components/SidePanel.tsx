@@ -55,9 +55,9 @@ export function SidePanel({ run, onSelectProject }: SidePanelProps) {
     return Array.from(cats).sort();
   }, [projectIds]);
 
-  // Filter projects by active category
+  // Filter projects by active category (defaultHidden projects only show when filtering)
   var filteredProjectIds = useMemo(() => {
-    if (!activeCategory) return projectIds;
+    if (!activeCategory) return projectIds.filter((id) => !PROJECTS[id].defaultHidden);
     return projectIds.filter((id) => PROJECTS[id].categories.includes(activeCategory!));
   }, [projectIds, activeCategory]);
 

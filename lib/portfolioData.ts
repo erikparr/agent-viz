@@ -13,6 +13,7 @@ export interface Project {
   mediaContent: string | string[];
   link?: string;
   details?: ProjectDetail[];
+  defaultHidden?: boolean;
 }
 
 export const PROJECTS: Record<string, Project> = {
@@ -94,6 +95,7 @@ export const PROJECTS: Record<string, Project> = {
     categories: ["3D", "Interactive"],
     mediaType: "image",
     mediaContent: ["/images/shader001.gif"],
+    defaultHidden: true,
   },
   adidas: {
     id: "adidas",

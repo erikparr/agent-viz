@@ -35,7 +35,7 @@ export function MobileAgentFlow({ run }: MobileAgentFlowProps) {
   }, [run.steps.length, currentIndex]);
 
   var steps = run.steps;
-  if (steps.length === 0) return null;
+  if (steps.length === 0 || !steps[currentIndex]) return null;
 
   function navigate(newIndex: number) {
     setDirection(newIndex > currentIndex ? 1 : -1);
@@ -118,16 +118,18 @@ export function MobileAgentFlow({ run }: MobileAgentFlowProps) {
       </div>
 
       {/* Step counter */}
-      <div className="text-center text-xs text-text-secondary">
-        {currentIndex + 1} / {steps.length}
-        <span className="text-border-muted mx-2">&middot;</span>
-        <span className={STEP_THEME[steps[currentIndex].type].text}>
-          {STEP_THEME[steps[currentIndex].type].label}
-        </span>
-        <span className="text-border-muted ml-2">
-          {flipped ? "(tap to flip back)" : "(tap for detail)"}
-        </span>
-      </div>
+      {steps[currentIndex] && (
+        <div className="text-center text-xs text-text-secondary">
+          {currentIndex + 1} / {steps.length}
+          <span className="text-border-muted mx-2">&middot;</span>
+          <span className={STEP_THEME[steps[currentIndex].type].text}>
+            {STEP_THEME[steps[currentIndex].type].label}
+          </span>
+          <span className="text-border-muted ml-2">
+            {flipped ? "(tap to flip back)" : "(tap for detail)"}
+          </span>
+        </div>
+      )}
 
       {/* Running indicator */}
       {run.status === "running" && (

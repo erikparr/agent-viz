@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
+import dynamic from "next/dynamic";
+import type { DitherRendererHandle } from "@/components/sandbox/DitherRenderer";
 import { CrosshatchBackground } from "@/components/CrosshatchBackground";
 import { TerminalChrome } from "@/components/TerminalChrome";
 import { QueryInput } from "@/components/QueryInput";
@@ -10,9 +12,35 @@ import { ProjectModal } from "@/components/ProjectModal";
 import { useAgentStream } from "@/hooks/useAgentStream";
 import type { Project } from "@/lib/portfolioData";
 
+const DitherRenderer = dynamic(
+  () =>
+    import("@/components/sandbox/DitherRenderer").then(
+      (mod) => mod.DitherRenderer
+    ),
+  { ssr: false }
+);
+
+const DITHER_PALETTES = [
+  { a: "#0a0e14", b: "#4a9ead" },
+  { a: "#1a0a00", b: "#ffaa00" },
+  { a: "#001a00", b: "#33ff33" },
+  { a: "#0a0005", b: "#ff2255" },
+  { a: "#1a1a18", b: "#e8e4d9" },
+  { a: "#020818", b: "#4466ff" },
+];
+
 export default function Home() {
   var { run, startRun, reset } = useAgentStream();
   var [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  var ditherRef = useRef<DitherRendererHandle>(null);
+  var paletteIndex = useRef(0);
+
+  var handleSubmit = useCallback((query: string, isPreset?: boolean) => {
+    paletteIndex.current = (paletteIndex.current + 1) % DITHER_PALETTES.length;
+    var palette = DITHER_PALETTES[paletteIndex.current];
+    ditherRef.current?.setColors(palette.a, palette.b);
+    startRun(query, isPreset);
+  }, [startRun]);
 
   var statusClass = run?.status === "running"
     ? "text-step-code"
@@ -35,10 +63,17 @@ export default function Home() {
         {/* Header — fixed height */}
         <div className="shrink-0 pb-4">
           <TerminalChrome title="erik parr — portfolio agent">
-            <QueryInput
-              onSubmit={startRun}
-              disabled={run?.status === "running"}
-            />
+            <div className="flex gap-4">
+              <div className="flex-1 min-w-0">
+                <QueryInput
+                  onSubmit={handleSubmit}
+                  disabled={run?.status === "running"}
+                />
+              </div>
+              <div className="hidden lg:block w-28 h-28 shrink-0 border border-border-muted">
+                <DitherRenderer ref={ditherRef} />
+              </div>
+            </div>
           </TerminalChrome>
         </div>
 

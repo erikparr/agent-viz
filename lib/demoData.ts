@@ -39,7 +39,7 @@ print(f"Found {len(projects)} projects")`,
           output: "Found 27 projects across categories: AI (8), Interactive (18), Exhibition/Museum (12), AR/VR (7), 3D (8), Artwork (7), Mechatronic (5). Projects span from installation art and physical computing to AI-native product design and agentic systems.",
           success: true,
         },
-        projectRefs: ["intuitive", "foam", "designsystem", "agentic3d", "landscape", "extrasensory"],
+        projectRefs: ["intuitive", "foam", "designsystem", "agentic3d", "landscape", "extrasensory", "arheadtracking", "immersivemotion", "interactive3dweb", "touchless", "futurestudio", "webxr"],
       },
       {
         type: "thinking",

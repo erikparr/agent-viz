@@ -28,7 +28,7 @@ export const PROJECTS: Record<string, Project> = {
     details: [
       {
         heading: "Context",
-        body: "I was the sole design technologist in Intuitive's Advanced Product Design group, working on problems 2-3 years ahead of shipping product. The challenge: surgeons produce huge volumes of data per procedure (video, instrument telemetry, system events) and have no good way to learn from any of it post-op. Everything was built locally under HIPAA constraints. The research that would eventually define what this product category even was hadn't been published yet, so requirements had to be invented alongside the science.",
+        body: "As Design Technologist at Intuitive Surgical, I led the Advanced Product Design group in the development of new design principles through the development of functional, production ready prototypes (internal tools and product facing) to define the direction of the Product Design team 2-3 years into the future. Prototype production focused on the following areas:",
       },
       {
         heading: "3D surgical tool path visualization",

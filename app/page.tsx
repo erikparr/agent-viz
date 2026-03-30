@@ -59,7 +59,7 @@ export default function Home() {
     <>
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
-      <div className={`relative z-10 flex flex-col min-h-screen lg:h-screen max-w-7xl mx-auto px-4 py-4 overflow-x-hidden transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
+      <div className={`relative z-10 flex flex-col min-h-screen lg:h-screen max-w-7xl mx-auto px-4 py-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
         {/* Header — fixed height */}
         <div className="shrink-0 pb-4">
           <TerminalChrome title="erik parr — portfolio agent">

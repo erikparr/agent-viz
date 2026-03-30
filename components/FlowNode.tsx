@@ -61,7 +61,7 @@ export function FlowNode({ step, index, isActive, onClick }: FlowNodeProps) {
       className="cursor-pointer group focus-visible:outline-none"
     >
       <div
-        className="relative w-full lg:max-w-2xl transition-[filter] duration-200 ring-2 ring-red-500"
+        className="relative w-full lg:max-w-2xl overflow-hidden transition-[filter] duration-200"
         style={{
           filter: isActive ? `drop-shadow(0 0 8px ${theme.hex})` : "none",
         }}

@@ -23,6 +23,12 @@ body {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: var(--font-mono);
+  overflow-x: hidden;
+}
+
+/* Fieldsets must respect parent width — prevent content from pushing wider */
+fieldset {
+  min-width: 0;
 }
 
 @keyframes blink {

@@ -27,6 +27,7 @@ const DITHER_FRAGMENT = `
   uniform float uPixelScale;
   uniform vec3 uColorA;
   uniform vec3 uColorB;
+  uniform vec3 uColorBg;
   uniform float uBayer[16];
 
   varying vec2 vUv;
@@ -55,28 +56,28 @@ const DITHER_FRAGMENT = `
       }
     }
 
+    float isObject = step(0.01, luma);
     float dithered = step(threshold, luma);
-    vec3 finalColor = mix(uColorA, uColorB, dithered);
+    vec3 lightColor = mix(uColorBg, uColorB, isObject);
+    vec3 finalColor = mix(uColorA, lightColor, dithered);
     gl_FragColor = vec4(finalColor, 1.0);
   }
 `;
 
 export interface DitherRendererHandle {
-  setColors: (a: string, b: string) => void;
+  setCubeColor: (color: string) => void;
 }
 
 export const DitherRenderer = forwardRef<DitherRendererHandle>(
   function DitherRenderer(_, ref) {
     var containerRef = useRef<HTMLDivElement>(null);
     var frameRef = useRef<number>(0);
-    var targetColorA = useRef(new THREE.Color(0x0a0e14));
-    var targetColorB = useRef(new THREE.Color(0x4a9ead));
+    var targetCubeColor = useRef(new THREE.Color(0x4a9ead));
     var materialRef = useRef<THREE.ShaderMaterial | null>(null);
 
     useImperativeHandle(ref, () => ({
-      setColors(a: string, b: string) {
-        targetColorA.current.set(a);
-        targetColorB.current.set(b);
+      setCubeColor(color: string) {
+        targetCubeColor.current.set(color);
       },
     }));
 
@@ -132,6 +133,7 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
           uPixelScale: { value: 1.5 },
           uColorA: { value: new THREE.Color(0x0a0e14) },
           uColorB: { value: new THREE.Color(0x4a9ead) },
+          uColorBg: { value: new THREE.Color("#e8e4d9") },
           uBayer: { value: BAYER_4X4 },
         },
         vertexShader: DITHER_VERTEX,
@@ -168,9 +170,8 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
         cube.rotation.x += 0.008;
         cube.rotation.y += 0.012;
 
-        // Lerp colors toward targets
-        ditherMaterial.uniforms.uColorA.value.lerp(targetColorA.current, lerpSpeed);
-        ditherMaterial.uniforms.uColorB.value.lerp(targetColorB.current, lerpSpeed);
+        // Lerp cube color toward target
+        ditherMaterial.uniforms.uColorB.value.lerp(targetCubeColor.current, lerpSpeed);
 
         // Pass 1: render scene to offscreen target
         renderer.setRenderTarget(renderTarget);

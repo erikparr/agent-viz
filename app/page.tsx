@@ -20,13 +20,13 @@ const DitherRenderer = dynamic(
   { ssr: false }
 );
 
-const DITHER_PALETTES = [
-  { a: "#0a0e14", b: "#4a9ead" },
-  { a: "#1a0a00", b: "#ffaa00" },
-  { a: "#001a00", b: "#33ff33" },
-  { a: "#0a0e14", b: "#e8e8e8" },
-  { a: "#1a1a18", b: "#e8e4d9" },
-  { a: "#020818", b: "#4466ff" },
+const DITHER_CUBE_COLORS = [
+  "#4a9ead",
+  "#ffaa00",
+  "#33ff33",
+  "#e8e8e8",
+  "#ff2255",
+  "#4466ff",
 ];
 
 export default function Home() {
@@ -36,9 +36,8 @@ export default function Home() {
   var paletteIndex = useRef(0);
 
   var handleSubmit = useCallback((query: string, isPreset?: boolean) => {
-    paletteIndex.current = (paletteIndex.current + 1) % DITHER_PALETTES.length;
-    var palette = DITHER_PALETTES[paletteIndex.current];
-    ditherRef.current?.setColors(palette.a, palette.b);
+    paletteIndex.current = (paletteIndex.current + 1) % DITHER_CUBE_COLORS.length;
+    ditherRef.current?.setCubeColor(DITHER_CUBE_COLORS[paletteIndex.current]);
     startRun(query, isPreset);
   }, [startRun]);
 

@@ -14,17 +14,15 @@ export function TerminalChrome({
   className = "",
 }: TerminalChromeProps) {
   return (
-    <div className={`relative border border-border-accent overflow-hidden ${className}`}>
+    <fieldset className={`relative border border-border-accent p-0 ${className}`}>
       {title && (
-        <div
-          className={`absolute top-0 left-4 -translate-y-1/2 px-2 text-sm bg-bg-primary ${colorClass}`}
-        >
+        <legend className={`ml-4 px-2 text-sm ${colorClass}`}>
           {title}
-        </div>
+        </legend>
       )}
-      <div className="px-4 py-3 pt-4 overflow-hidden">
+      <div className="px-4 py-3">
         {children}
       </div>
-    </div>
+    </fieldset>
   );
 }

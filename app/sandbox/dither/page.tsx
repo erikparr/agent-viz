@@ -13,12 +13,12 @@ const DitherRenderer = dynamic(
 );
 
 const PALETTES = [
-  { name: "Terminal", a: "#0a0e14", b: "#4a9ead" },
-  { name: "Amber", a: "#1a0a00", b: "#ffaa00" },
-  { name: "Phosphor", a: "#001a00", b: "#33ff33" },
-  { name: "Infrared", a: "#0a0005", b: "#ff2255" },
-  { name: "Bone", a: "#1a1a18", b: "#e8e4d9" },
-  { name: "Cobalt", a: "#020818", b: "#4466ff" },
+  { name: "Terminal", bg: "#0a0e14", a: "#0a2a30", b: "#4a9ead" },
+  { name: "Amber", bg: "#1a0a00", a: "#3a2000", b: "#ffaa00" },
+  { name: "Phosphor", bg: "#001a00", a: "#003a00", b: "#33ff33" },
+  { name: "Bone", bg: "#1a1a18", a: "#3a3a35", b: "#e8e4d9" },
+  { name: "Cobalt", bg: "#020818", a: "#0a1838", b: "#4466ff" },
+  { name: "White", bg: "#0a0e14", a: "#2a2e34", b: "#e8e8e8" },
 ];
 
 export default function DitherSandboxPage() {
@@ -27,7 +27,8 @@ export default function DitherSandboxPage() {
 
   function selectPalette(index: number) {
     setActivePalette(index);
-    rendererRef.current?.setColors(PALETTES[index].a, PALETTES[index].b);
+    var p = PALETTES[index];
+    rendererRef.current?.setColors(p.bg, p.a, p.b);
   }
 
   return (

@@ -21,12 +21,12 @@ const DitherRenderer = dynamic(
 );
 
 const DITHER_PALETTES = [
-  { a: "#0a0e14", b: "#4a9ead" },
-  { a: "#1a0a00", b: "#ffaa00" },
-  { a: "#001a00", b: "#33ff33" },
-  { a: "#0a0e14", b: "#e8e8e8" },
-  { a: "#1a1a18", b: "#e8e4d9" },
-  { a: "#020818", b: "#4466ff" },
+  { bg: "#0a0e14", a: "#0a2a30", b: "#4a9ead" },
+  { bg: "#1a0a00", a: "#3a2000", b: "#ffaa00" },
+  { bg: "#001a00", a: "#003a00", b: "#33ff33" },
+  { bg: "#0a0e14", a: "#2a2e34", b: "#e8e8e8" },
+  { bg: "#1a1a18", a: "#3a3a35", b: "#e8e4d9" },
+  { bg: "#020818", a: "#0a1838", b: "#4466ff" },
 ];
 
 export default function Home() {
@@ -38,7 +38,7 @@ export default function Home() {
   var handleSubmit = useCallback((query: string, isPreset?: boolean) => {
     paletteIndex.current = (paletteIndex.current + 1) % DITHER_PALETTES.length;
     var palette = DITHER_PALETTES[paletteIndex.current];
-    ditherRef.current?.setColors(palette.a, palette.b);
+    ditherRef.current?.setColors(palette.bg, palette.a, palette.b);
     startRun(query, isPreset);
   }, [startRun]);
 

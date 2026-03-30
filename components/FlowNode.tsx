@@ -61,7 +61,7 @@ export function FlowNode({ step, index, isActive, onClick }: FlowNodeProps) {
       className="cursor-pointer group focus-visible:outline-none"
     >
       <div
-        className="relative max-w-2xl transition-[filter] duration-200"
+        className="relative w-full lg:max-w-2xl transition-[filter] duration-200 ring-2 ring-red-500"
         style={{
           filter: isActive ? `drop-shadow(0 0 8px ${theme.hex})` : "none",
         }}
@@ -72,7 +72,7 @@ export function FlowNode({ step, index, isActive, onClick }: FlowNodeProps) {
           <span className="text-text-secondary font-normal">{String(index + 1).padStart(2, "0")}</span>
           <span className="mx-1 text-border-muted">·</span>
           <span className="font-bold">{theme.label}</span>
-          <span className="flex-1 overflow-hidden whitespace-nowrap">
+          <span className="flex-1 min-w-0 overflow-hidden whitespace-nowrap">
             {" "}{"─".repeat(120)}
           </span>
           <span>╮</span>
@@ -99,7 +99,7 @@ export function FlowNode({ step, index, isActive, onClick }: FlowNodeProps) {
         {/* Bottom border */}
         <div className={`flex items-center text-xs leading-none ${theme.text}`}>
           <span>╰</span>
-          <span className="flex-1 overflow-hidden whitespace-nowrap">
+          <span className="flex-1 min-w-0 overflow-hidden whitespace-nowrap">
             {"─".repeat(120)}
           </span>
           <span>╯</span>

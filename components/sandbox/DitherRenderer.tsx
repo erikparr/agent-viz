@@ -158,20 +158,61 @@ const DITHER_FRAGMENT = `
   }
 `;
 
+const DEFAULT_BLOB_COLOR = "#00D177";
+
 export interface DitherRendererHandle {
-  setCubeColor: (color: string) => void;
+  flashColor: () => void;
+}
+
+const WANDER_PALETTE = [
+  // Vibrant
+  "#FF4900", "#EE0050", "#5F2DFF", "#75F000", "#00B4FF",
+  "#FF00AA", "#FFD600", "#00FFC8", "#FF6B35", "#8B00FF",
+  // Saturated mid
+  "#E8453C", "#2D9CDB", "#27AE60", "#F2994A", "#9B51E0",
+  // Subdued / desaturated
+  "#7A8B6E", "#A89078", "#6B7F99", "#9E8A7C", "#708078",
+];
+
+const WANDER_DURATION = 3.0;
+const WANDER_STOPS = 5;
+
+type ColorPhase = "idle" | "wandering" | "returning";
+
+function pickWanderColors(currentColor: THREE.Color): THREE.Color[] {
+  var colors: THREE.Color[] = [currentColor.clone()];
+  var available = [...WANDER_PALETTE];
+  for (var i = 0; i < WANDER_STOPS; i++) {
+    var idx = Math.floor(Math.random() * available.length);
+    colors.push(new THREE.Color(available.splice(idx, 1)[0]));
+  }
+  return colors;
+}
+
+function smoothstep(t: number): number {
+  return t * t * (3 - 2 * t);
 }
 
 export const DitherRenderer = forwardRef<DitherRendererHandle>(
   function DitherRenderer(_, ref) {
     var containerRef = useRef<HTMLDivElement>(null);
     var frameRef = useRef<number>(0);
-    var targetCubeColor = useRef(new THREE.Color(0x4a9ead));
     var materialRef = useRef<THREE.ShaderMaterial | null>(null);
+    var phaseRef = useRef<{ phase: ColorPhase; startTime: number; waypoints: THREE.Color[] }>({
+      phase: "idle",
+      startTime: 0,
+      waypoints: [],
+    });
+    var defaultColor = useRef(new THREE.Color(DEFAULT_BLOB_COLOR));
 
     useImperativeHandle(ref, () => ({
-      setCubeColor(color: string) {
-        targetCubeColor.current.set(color);
+      flashColor() {
+        var current = materialRef.current
+          ? materialRef.current.uniforms.uColorB.value
+          : defaultColor.current;
+        phaseRef.current.waypoints = pickWanderColors(current);
+        phaseRef.current.phase = "wandering";
+        phaseRef.current.startTime = -1;
       },
     }));
 
@@ -220,7 +261,7 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
           uResolution: { value: new THREE.Vector2(512, 512) },
           uPixelScale: { value: 1.5 },
           uColorA: { value: new THREE.Color(0x0a0e14) },
-          uColorB: { value: new THREE.Color(0x4a9ead) },
+          uColorB: { value: new THREE.Color(DEFAULT_BLOB_COLOR) },
           uColorBg: { value: new THREE.Color("#e8e4d9") },
           uBayer: { value: BAYER_4X4 },
         },
@@ -248,7 +289,7 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
       resizeObserver.observe(container);
 
       // --- Animate ---
-      var lerpSpeed = 0.04;
+      var tempColor = new THREE.Color();
 
       function animate() {
         frameRef.current = requestAnimationFrame(animate);
@@ -260,8 +301,38 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
         blob.rotation.y = elapsed * 0.15;
         blob.rotation.x = Math.sin(elapsed * 0.1) * 0.1;
 
-        // Lerp cube color toward target
-        ditherMaterial.uniforms.uColorB.value.lerp(targetCubeColor.current, lerpSpeed);
+        // Color phase state machine
+        var p = phaseRef.current;
+        var colorB = ditherMaterial.uniforms.uColorB.value;
+
+        if (p.phase === "idle") {
+          colorB.lerp(defaultColor.current, 0.04);
+        } else if (p.phase === "wandering") {
+          if (p.startTime < 0) p.startTime = elapsed;
+          var dt = elapsed - p.startTime;
+          var t = Math.min(dt / WANDER_DURATION, 1.0);
+
+          // Map t to a position along the waypoint chain
+          var segments = p.waypoints.length - 1;
+          var segPos = t * segments;
+          var segIdx = Math.min(Math.floor(segPos), segments - 1);
+          var segT = smoothstep(segPos - segIdx);
+
+          tempColor.copy(p.waypoints[segIdx]).lerp(p.waypoints[segIdx + 1], segT);
+          colorB.copy(tempColor);
+
+          if (dt >= WANDER_DURATION) {
+            p.phase = "returning";
+            p.startTime = elapsed;
+          }
+        } else if (p.phase === "returning") {
+          if (p.startTime < 0) p.startTime = elapsed;
+          var dt = elapsed - p.startTime;
+          colorB.lerp(defaultColor.current, 0.06);
+          if (dt >= 1.0) {
+            p.phase = "idle";
+          }
+        }
 
         // Pass 1: render scene to offscreen target
         renderer.setRenderTarget(renderTarget);

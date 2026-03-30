@@ -20,24 +20,15 @@ const DitherRenderer = dynamic(
   { ssr: false }
 );
 
-const DITHER_CUBE_COLORS = [
-  "#4a9ead",
-  "#ffaa00",
-  "#33ff33",
-  "#e8e8e8",
-  "#ff2255",
-  "#4466ff",
-];
+
 
 export default function Home() {
   var { run, startRun, reset } = useAgentStream();
   var [selectedProject, setSelectedProject] = useState<Project | null>(null);
   var ditherRef = useRef<DitherRendererHandle>(null);
-  var paletteIndex = useRef(0);
 
   var handleSubmit = useCallback((query: string, isPreset?: boolean) => {
-    paletteIndex.current = (paletteIndex.current + 1) % DITHER_CUBE_COLORS.length;
-    ditherRef.current?.setCubeColor(DITHER_CUBE_COLORS[paletteIndex.current]);
+    ditherRef.current?.flashColor();
     startRun(query, isPreset);
   }, [startRun]);
 

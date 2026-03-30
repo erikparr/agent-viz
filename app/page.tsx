@@ -81,7 +81,7 @@ export default function Home() {
         {run && (
           <div className={`flex gap-6 lg:min-h-0 flex-1 ${hasSideContent ? "flex-col lg:flex-row" : ""}`}>
             {/* Left column — agent flow */}
-            <div className={`${hasSideContent ? "lg:w-3/5" : "w-full"} lg:min-h-0 lg:overflow-y-auto scrollbar-terminal`}>
+            <div className={`${hasSideContent ? "lg:w-3/5" : "w-full"} min-w-0 lg:min-h-0 lg:overflow-y-auto scrollbar-terminal`}>
               <TerminalChrome title={`Run: ${run.query.slice(0, 50)}`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">

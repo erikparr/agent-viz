@@ -20,7 +20,7 @@ export function TerminalChrome({
           {title}
         </legend>
       )}
-      <div className="px-4 py-3">
+      <div className="px-4 py-3 overflow-hidden">
         {children}
       </div>
     </fieldset>

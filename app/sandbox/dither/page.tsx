@@ -13,12 +13,12 @@ const DitherRenderer = dynamic(
 );
 
 const PALETTES = [
-  { name: "Terminal", bg: "#0a0e14", a: "#0a2a30", b: "#4a9ead" },
-  { name: "Amber", bg: "#1a0a00", a: "#3a2000", b: "#ffaa00" },
-  { name: "Phosphor", bg: "#001a00", a: "#003a00", b: "#33ff33" },
-  { name: "Bone", bg: "#1a1a18", a: "#3a3a35", b: "#e8e4d9" },
-  { name: "Cobalt", bg: "#020818", a: "#0a1838", b: "#4466ff" },
-  { name: "White", bg: "#0a0e14", a: "#2a2e34", b: "#e8e8e8" },
+  { name: "Terminal", bg: "#0a0e14", bgLine: "#334455", a: "#0a2a30", b: "#4a9ead" },
+  { name: "Amber", bg: "#1a0a00", bgLine: "#554422", a: "#3a2000", b: "#ffaa00" },
+  { name: "Phosphor", bg: "#001a00", bgLine: "#225522", a: "#003a00", b: "#33ff33" },
+  { name: "Bone", bg: "#1a1a18", bgLine: "#444440", a: "#3a3a35", b: "#e8e4d9" },
+  { name: "Cobalt", bg: "#020818", bgLine: "#223366", a: "#0a1838", b: "#4466ff" },
+  { name: "White", bg: "#0a0e14", bgLine: "#334455", a: "#2a2e34", b: "#e8e8e8" },
 ];
 
 export default function DitherSandboxPage() {
@@ -28,7 +28,7 @@ export default function DitherSandboxPage() {
   function selectPalette(index: number) {
     setActivePalette(index);
     var p = PALETTES[index];
-    rendererRef.current?.setColors(p.bg, p.a, p.b);
+    rendererRef.current?.setColors(p.bg, p.bgLine, p.a, p.b);
   }
 
   return (

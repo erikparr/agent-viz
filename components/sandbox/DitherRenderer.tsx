@@ -26,6 +26,8 @@ const DITHER_FRAGMENT = `
   uniform vec2 uResolution;
   uniform float uPixelScale;
   uniform vec3 uBgColor;
+  uniform vec3 uBgLineColor;
+  uniform float uBgLineSpacing;
   uniform vec3 uColorA;
   uniform vec3 uColorB;
   uniform float uBayer[16];
@@ -37,12 +39,18 @@ const DITHER_FRAGMENT = `
     vec2 pixelSize = uPixelScale / uResolution;
     vec2 pixelUv = floor(vUv / pixelSize) * pixelSize + pixelSize * 0.5;
 
-    // Sample scene (alpha encodes object vs background)
     vec4 color = texture2D(uSceneTexture, pixelUv);
 
-    // Background: flat color, no dithering
+    // Background: dither between bgColor and bgLineColor
     if (color.a < 0.01) {
-      gl_FragColor = vec4(uBgColor, 1.0);
+      float cell = 6.0;
+      vec2 cellId = floor(gl_FragCoord.xy / cell);
+      float skip = mod(cellId.x + cellId.y, 3.0);
+      vec2 c = mod(gl_FragCoord.xy, cell) - cell * 0.5;
+      float diag1 = abs(c.x - c.y);
+      float diag2 = abs(c.x + c.y);
+      float d = step(min(diag1, diag2), 0.5) * skip;
+      gl_FragColor = vec4(mix(uBgColor, uBgLineColor, d), 1.0);
       return;
     }
 
@@ -68,7 +76,7 @@ const DITHER_FRAGMENT = `
 `;
 
 export interface DitherRendererHandle {
-  setColors: (bg: string, a: string, b: string) => void;
+  setColors: (bg: string, bgLine: string, a: string, b: string) => void;
 }
 
 export const DitherRenderer = forwardRef<DitherRendererHandle>(
@@ -76,13 +84,15 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
     var containerRef = useRef<HTMLDivElement>(null);
     var frameRef = useRef<number>(0);
     var targetBgColor = useRef(new THREE.Color(0x0a0e14));
-    var targetColorA = useRef(new THREE.Color(0x0a0e14));
+    var targetBgLineColor = useRef(new THREE.Color(0xffffff));
+    var targetColorA = useRef(new THREE.Color(0x0a2a30));
     var targetColorB = useRef(new THREE.Color(0x4a9ead));
     var materialRef = useRef<THREE.ShaderMaterial | null>(null);
 
     useImperativeHandle(ref, () => ({
-      setColors(bg: string, a: string, b: string) {
+      setColors(bg: string, bgLine: string, a: string, b: string) {
         targetBgColor.current.set(bg);
+        targetBgLineColor.current.set(bgLine);
         targetColorA.current.set(a);
         targetColorB.current.set(b);
       },
@@ -128,7 +138,10 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
       scene.add(fillLight);
 
       // --- Render target (offscreen framebuffer) ---
-      var renderTarget = new THREE.WebGLRenderTarget(512, 512);
+      var renderTarget = new THREE.WebGLRenderTarget(512, 512, {
+        format: THREE.RGBAFormat,
+        type: THREE.UnsignedByteType,
+      });
 
       // --- Dither pass (pass 2): fullscreen quad ---
       var ditherScene = new THREE.Scene();
@@ -140,7 +153,9 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
           uResolution: { value: new THREE.Vector2(512, 512) },
           uPixelScale: { value: 1.5 },
           uBgColor: { value: new THREE.Color(0x0a0e14) },
-          uColorA: { value: new THREE.Color(0x0a0e14) },
+          uBgLineColor: { value: new THREE.Color(0xffffff) },
+          uBgLineSpacing: { value: 12.0 },
+          uColorA: { value: new THREE.Color(0x0a2a30) },
           uColorB: { value: new THREE.Color(0x4a9ead) },
           uBayer: { value: BAYER_4X4 },
         },
@@ -180,11 +195,13 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
 
         // Lerp colors toward targets
         ditherMaterial.uniforms.uBgColor.value.lerp(targetBgColor.current, lerpSpeed);
+        ditherMaterial.uniforms.uBgLineColor.value.lerp(targetBgLineColor.current, lerpSpeed);
         ditherMaterial.uniforms.uColorA.value.lerp(targetColorA.current, lerpSpeed);
         ditherMaterial.uniforms.uColorB.value.lerp(targetColorB.current, lerpSpeed);
 
         // Pass 1: render scene to offscreen target
         renderer.setRenderTarget(renderTarget);
+        renderer.clearColor();
         renderer.render(scene, camera);
 
         // Pass 2: render dithered result to screen

@@ -14,7 +14,7 @@ export function TerminalChrome({
   className = "",
 }: TerminalChromeProps) {
   return (
-    <fieldset className={`relative border border-border-accent p-0 ${className}`}>
+    <fieldset className={`relative border border-border-accent p-0 max-w-full overflow-hidden ${className}`}>
       {title && (
         <legend className={`ml-4 px-2 text-sm ${colorClass}`}>
           {title}

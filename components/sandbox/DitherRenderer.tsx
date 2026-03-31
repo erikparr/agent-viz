@@ -2,6 +2,12 @@
 
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import * as THREE from "three";
+import {
+  hexToOklab,
+  oklabToHex,
+  oklabLerp,
+  type OklabColor,
+} from "@/lib/oklab";
 
 // 4x4 Bayer matrix (normalized 0-1 range), encoded as float array
 const BAYER_4X4 = [
@@ -158,13 +164,13 @@ const DITHER_FRAGMENT = `
   }
 `;
 
-const DEFAULT_BLOB_COLOR = "#00D177";
+const DEFAULT_BLOB_COLOR = "#9A8EC2";
 
 export interface DitherRendererHandle {
   flashColor: () => void;
 }
 
-const WANDER_PALETTE = [
+const WANDER_PALETTE_OKLAB: OklabColor[] = [
   // Vibrant
   "#FF4900", "#EE0050", "#5F2DFF", "#75F000", "#00B4FF",
   "#FF00AA", "#FFD600", "#00FFC8", "#FF6B35", "#8B00FF",
@@ -172,25 +178,44 @@ const WANDER_PALETTE = [
   "#E8453C", "#2D9CDB", "#27AE60", "#F2994A", "#9B51E0",
   // Subdued / desaturated
   "#7A8B6E", "#A89078", "#6B7F99", "#9E8A7C", "#708078",
-];
+].map(hexToOklab);
 
+const DEFAULT_OKLAB = hexToOklab(DEFAULT_BLOB_COLOR);
 const WANDER_DURATION = 3.0;
 const WANDER_STOPS = 5;
 
 type ColorPhase = "idle" | "wandering" | "returning";
 
-function pickWanderColors(currentColor: THREE.Color): THREE.Color[] {
-  var colors: THREE.Color[] = [currentColor.clone()];
-  var available = [...WANDER_PALETTE];
-  for (var i = 0; i < WANDER_STOPS; i++) {
-    var idx = Math.floor(Math.random() * available.length);
-    colors.push(new THREE.Color(available.splice(idx, 1)[0]));
-  }
-  return colors;
+function catmullRomOklab(
+  p0: OklabColor, p1: OklabColor, p2: OklabColor, p3: OklabColor, t: number
+): OklabColor {
+  var t2 = t * t;
+  var t3 = t2 * t;
+  return {
+    L: 0.5 * ((2 * p1.L) + (-p0.L + p2.L) * t + (2 * p0.L - 5 * p1.L + 4 * p2.L - p3.L) * t2 + (-p0.L + 3 * p1.L - 3 * p2.L + p3.L) * t3),
+    a: 0.5 * ((2 * p1.a) + (-p0.a + p2.a) * t + (2 * p0.a - 5 * p1.a + 4 * p2.a - p3.a) * t2 + (-p0.a + 3 * p1.a - 3 * p2.a + p3.a) * t3),
+    b: 0.5 * ((2 * p1.b) + (-p0.b + p2.b) * t + (2 * p0.b - 5 * p1.b + 4 * p2.b - p3.b) * t2 + (-p0.b + 3 * p1.b - 3 * p2.b + p3.b) * t3),
+  };
 }
 
-function smoothstep(t: number): number {
-  return t * t * (3 - 2 * t);
+function getSplinePoints(waypoints: OklabColor[], segIdx: number) {
+  var last = waypoints.length - 1;
+  return {
+    p0: waypoints[Math.max(segIdx - 1, 0)],
+    p1: waypoints[segIdx],
+    p2: waypoints[Math.min(segIdx + 1, last)],
+    p3: waypoints[Math.min(segIdx + 2, last)],
+  };
+}
+
+function pickWanderColors(currentHex: string): OklabColor[] {
+  var colors: OklabColor[] = [hexToOklab(currentHex)];
+  var available = [...WANDER_PALETTE_OKLAB];
+  for (var i = 0; i < WANDER_STOPS; i++) {
+    var idx = Math.floor(Math.random() * available.length);
+    colors.push(available.splice(idx, 1)[0]);
+  }
+  return colors;
 }
 
 export const DitherRenderer = forwardRef<DitherRendererHandle>(
@@ -198,19 +223,24 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
     var containerRef = useRef<HTMLDivElement>(null);
     var frameRef = useRef<number>(0);
     var materialRef = useRef<THREE.ShaderMaterial | null>(null);
-    var phaseRef = useRef<{ phase: ColorPhase; startTime: number; waypoints: THREE.Color[] }>({
+    var phaseRef = useRef<{
+      phase: ColorPhase;
+      startTime: number;
+      waypoints: OklabColor[];
+      returnFrom: OklabColor;
+    }>({
       phase: "idle",
       startTime: 0,
       waypoints: [],
+      returnFrom: { ...DEFAULT_OKLAB },
     });
-    var defaultColor = useRef(new THREE.Color(DEFAULT_BLOB_COLOR));
 
     useImperativeHandle(ref, () => ({
       flashColor() {
-        var current = materialRef.current
-          ? materialRef.current.uniforms.uColorB.value
-          : defaultColor.current;
-        phaseRef.current.waypoints = pickWanderColors(current);
+        var currentHex = materialRef.current
+          ? "#" + materialRef.current.uniforms.uColorB.value.getHexString()
+          : DEFAULT_BLOB_COLOR;
+        phaseRef.current.waypoints = pickWanderColors(currentHex);
         phaseRef.current.phase = "wandering";
         phaseRef.current.startTime = -1;
       },
@@ -289,8 +319,6 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
       resizeObserver.observe(container);
 
       // --- Animate ---
-      var tempColor = new THREE.Color();
-
       function animate() {
         frameRef.current = requestAnimationFrame(animate);
 
@@ -301,34 +329,44 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
         blob.rotation.y = elapsed * 0.15;
         blob.rotation.x = Math.sin(elapsed * 0.1) * 0.1;
 
-        // Color phase state machine
+        // Color phase state machine (OKLab interpolation)
         var p = phaseRef.current;
         var colorB = ditherMaterial.uniforms.uColorB.value;
 
         if (p.phase === "idle") {
-          colorB.lerp(defaultColor.current, 0.04);
+          colorB.lerp(new THREE.Color(DEFAULT_BLOB_COLOR), 0.04);
         } else if (p.phase === "wandering") {
           if (p.startTime < 0) p.startTime = elapsed;
           var dt = elapsed - p.startTime;
-          var t = Math.min(dt / WANDER_DURATION, 1.0);
 
-          // Map t to a position along the waypoint chain
+          // Speed variation
+          var speedMod = 1.0 + 0.15 * Math.sin(dt * 7.3) + 0.1 * Math.sin(dt * 3.1);
+          var t = Math.min(dt * speedMod / WANDER_DURATION, 1.0);
+
+          // Catmull-Rom spline through OKLab waypoints
           var segments = p.waypoints.length - 1;
           var segPos = t * segments;
           var segIdx = Math.min(Math.floor(segPos), segments - 1);
-          var segT = smoothstep(segPos - segIdx);
+          var segT = segPos - segIdx;
 
-          tempColor.copy(p.waypoints[segIdx]).lerp(p.waypoints[segIdx + 1], segT);
-          colorB.copy(tempColor);
+          var sp = getSplinePoints(p.waypoints, segIdx);
+          var interp = catmullRomOklab(sp.p0, sp.p1, sp.p2, sp.p3, segT);
+          colorB.set(oklabToHex(interp.L, interp.a, interp.b));
 
           if (dt >= WANDER_DURATION) {
+            p.returnFrom = { ...interp };
             p.phase = "returning";
             p.startTime = elapsed;
           }
         } else if (p.phase === "returning") {
           if (p.startTime < 0) p.startTime = elapsed;
           var dt = elapsed - p.startTime;
-          colorB.lerp(defaultColor.current, 0.06);
+
+          // Lerp in OKLab back to default
+          var interp = oklabLerp(p.returnFrom, DEFAULT_OKLAB, 0.06);
+          p.returnFrom = interp;
+          colorB.set(oklabToHex(interp.L, interp.a, interp.b));
+
           if (dt >= 1.0) {
             p.phase = "idle";
           }

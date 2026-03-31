@@ -29,8 +29,27 @@ const CANVAS_SIZE = 500;
 var paletteOklab = WANDER_PALETTE.map((hex) => ({ hex, ...hexToOklab(hex) }));
 var defaultOklab = hexToOklab(DEFAULT_COLOR);
 
-function smoothstep(t: number): number {
-  return t * t * (3 - 2 * t);
+// Catmull-Rom interpolation between P1 and P2, using P0 and P3 for tangent continuity
+function catmullRomOklab(
+  p0: OklabColor, p1: OklabColor, p2: OklabColor, p3: OklabColor, t: number
+): OklabColor {
+  var t2 = t * t;
+  var t3 = t2 * t;
+  return {
+    L: 0.5 * ((2 * p1.L) + (-p0.L + p2.L) * t + (2 * p0.L - 5 * p1.L + 4 * p2.L - p3.L) * t2 + (-p0.L + 3 * p1.L - 3 * p2.L + p3.L) * t3),
+    a: 0.5 * ((2 * p1.a) + (-p0.a + p2.a) * t + (2 * p0.a - 5 * p1.a + 4 * p2.a - p3.a) * t2 + (-p0.a + 3 * p1.a - 3 * p2.a + p3.a) * t3),
+    b: 0.5 * ((2 * p1.b) + (-p0.b + p2.b) * t + (2 * p0.b - 5 * p1.b + 4 * p2.b - p3.b) * t2 + (-p0.b + 3 * p1.b - 3 * p2.b + p3.b) * t3),
+  };
+}
+
+// Get Catmull-Rom control points with endpoint duplication
+function getSplinePoints(waypoints: OklabColor[], segIdx: number) {
+  var last = waypoints.length - 1;
+  var p0 = waypoints[Math.max(segIdx - 1, 0)];
+  var p1 = waypoints[segIdx];
+  var p2 = waypoints[Math.min(segIdx + 1, last)];
+  var p3 = waypoints[Math.min(segIdx + 2, last)];
+  return { p0, p1, p2, p3 };
 }
 
 function pickWanderColors(current: OklabColor): OklabColor[] {
@@ -54,6 +73,7 @@ function abToCanvas(a: number, b: number): { x: number; y: number } {
 export default function OklabSandboxPage() {
   var gamutCanvasRef = useRef<HTMLCanvasElement>(null);
   var overlayCanvasRef = useRef<HTMLCanvasElement>(null);
+  var speedCanvasRef = useRef<HTMLCanvasElement>(null);
   var animRef = useRef<number>(0);
   var trailRef = useRef<{ x: number; y: number; hex: string }[]>([]);
   var phaseRef = useRef<{
@@ -117,36 +137,34 @@ export default function OklabSandboxPage() {
       if (p.phase === "wandering") {
         if (p.startTime < 0) p.startTime = now;
         var dt = now - p.startTime;
-        var t = Math.min(dt / WANDER_DURATION, 1.0);
+
+        // Speed variation — breathe faster and slower along the path
+        var speedMod = 1.0 + 0.15 * Math.sin(dt * 7.3) + 0.1 * Math.sin(dt * 3.1);
+        var t = Math.min(dt * speedMod / WANDER_DURATION, 1.0);
 
         var segments = p.waypoints.length - 1;
         var segPos = t * segments;
         var segIdx = Math.min(Math.floor(segPos), segments - 1);
-        var segT = smoothstep(segPos - segIdx);
+        var segT = segPos - segIdx;
 
         if (p.mode === "oklab") {
-          var interp = oklabLerp(p.waypoints[segIdx], p.waypoints[segIdx + 1], segT);
+          // Catmull-Rom spline through OKLab waypoints
+          var sp = getSplinePoints(p.waypoints, segIdx);
+          var interp = catmullRomOklab(sp.p0, sp.p1, sp.p2, sp.p3, segT);
           cur.L = interp.L;
           cur.a = interp.a;
           cur.b = interp.b;
         } else {
-          // RGB interpolation — convert waypoints to RGB, lerp, convert back
-          var c1 = p.waypoints[segIdx];
-          var c2 = p.waypoints[segIdx + 1];
-          var hex1 = oklabToHex(c1.L, c1.a, c1.b);
-          var hex2 = oklabToHex(c2.L, c2.a, c2.b);
-          var r1 = parseInt(hex1.slice(1, 3), 16) / 255;
-          var g1 = parseInt(hex1.slice(3, 5), 16) / 255;
-          var b1 = parseInt(hex1.slice(5, 7), 16) / 255;
-          var r2 = parseInt(hex2.slice(1, 3), 16) / 255;
-          var g2 = parseInt(hex2.slice(3, 5), 16) / 255;
-          var b2 = parseInt(hex2.slice(5, 7), 16) / 255;
-          var rr = r1 + (r2 - r1) * segT;
-          var gg = g1 + (g2 - g1) * segT;
-          var bb = b1 + (b2 - b1) * segT;
-          var okResult = hexToOklab(
-            `#${Math.round(rr * 255).toString(16).padStart(2, "0")}${Math.round(gg * 255).toString(16).padStart(2, "0")}${Math.round(bb * 255).toString(16).padStart(2, "0")}`
-          );
+          // RGB Catmull-Rom — convert to RGB, spline, convert back
+          var sp = getSplinePoints(p.waypoints, segIdx);
+          var rgbPoints = [sp.p0, sp.p1, sp.p2, sp.p3].map((c) => oklabToSrgb(c.L, c.a, c.b));
+          var t2 = segT * segT;
+          var t3 = t2 * segT;
+          var rr = 0.5 * ((2 * rgbPoints[1].r) + (-rgbPoints[0].r + rgbPoints[2].r) * segT + (2 * rgbPoints[0].r - 5 * rgbPoints[1].r + 4 * rgbPoints[2].r - rgbPoints[3].r) * t2 + (-rgbPoints[0].r + 3 * rgbPoints[1].r - 3 * rgbPoints[2].r + rgbPoints[3].r) * t3);
+          var gg = 0.5 * ((2 * rgbPoints[1].g) + (-rgbPoints[0].g + rgbPoints[2].g) * segT + (2 * rgbPoints[0].g - 5 * rgbPoints[1].g + 4 * rgbPoints[2].g - rgbPoints[3].g) * t2 + (-rgbPoints[0].g + 3 * rgbPoints[1].g - 3 * rgbPoints[2].g + rgbPoints[3].g) * t3);
+          var bb = 0.5 * ((2 * rgbPoints[1].b) + (-rgbPoints[0].b + rgbPoints[2].b) * segT + (2 * rgbPoints[0].b - 5 * rgbPoints[1].b + 4 * rgbPoints[2].b - rgbPoints[3].b) * t2 + (-rgbPoints[0].b + 3 * rgbPoints[1].b - 3 * rgbPoints[2].b + rgbPoints[3].b) * t3);
+          var clamped = `#${Math.round(Math.max(0, Math.min(1, rr)) * 255).toString(16).padStart(2, "0")}${Math.round(Math.max(0, Math.min(1, gg)) * 255).toString(16).padStart(2, "0")}${Math.round(Math.max(0, Math.min(1, bb)) * 255).toString(16).padStart(2, "0")}`;
+          var okResult = hexToOklab(clamped);
           cur.L = okResult.L;
           cur.a = okResult.a;
           cur.b = okResult.b;
@@ -249,6 +267,90 @@ export default function OklabSandboxPage() {
       ctx.strokeStyle = "white";
       ctx.lineWidth = 2;
       ctx.stroke();
+
+      // --- Speed curve visualization ---
+      var speedCanvas = speedCanvasRef.current;
+      if (speedCanvas) {
+        var sctx = speedCanvas.getContext("2d");
+        if (sctx) {
+          var sw = speedCanvas.width;
+          var sh = speedCanvas.height;
+          sctx.clearRect(0, 0, sw, sh);
+
+          // Background
+          sctx.fillStyle = "rgba(10, 14, 20, 0.8)";
+          sctx.fillRect(0, 0, sw, sh);
+
+          // Baseline (speed = 1.0)
+          var baseY = sh * 0.5;
+          sctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+          sctx.lineWidth = 1;
+          sctx.beginPath();
+          sctx.moveTo(0, baseY);
+          sctx.lineTo(sw, baseY);
+          sctx.stroke();
+
+          // Labels
+          sctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+          sctx.font = "9px monospace";
+          sctx.fillText("speed", 4, 12);
+          sctx.fillText("1.0", sw - 22, baseY - 4);
+          sctx.fillText("0s", 4, sh - 4);
+          sctx.fillText("3s", sw - 16, sh - 4);
+
+          // Draw speed curve
+          sctx.strokeStyle = "#00D177";
+          sctx.lineWidth = 1.5;
+          sctx.beginPath();
+          var yScale = sh * 0.35;
+          for (var sx = 0; sx < sw; sx++) {
+            var st = (sx / sw) * WANDER_DURATION;
+            var speed = 1.0 + 0.15 * Math.sin(st * 7.3) + 0.1 * Math.sin(st * 3.1);
+            var sy = baseY - (speed - 1.0) * yScale / 0.25;
+            if (sx === 0) sctx.moveTo(sx, sy);
+            else sctx.lineTo(sx, sy);
+          }
+          sctx.stroke();
+
+          // Draw effective t curve (accumulated progress)
+          sctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+          sctx.lineWidth = 1;
+          sctx.beginPath();
+          for (var sx = 0; sx < sw; sx++) {
+            var st = (sx / sw) * WANDER_DURATION;
+            var speedMod = 1.0 + 0.15 * Math.sin(st * 7.3) + 0.1 * Math.sin(st * 3.1);
+            var tVal = Math.min(st * speedMod / WANDER_DURATION, 1.0);
+            var sy = sh - 8 - tVal * (sh - 20);
+            if (sx === 0) sctx.moveTo(sx, sy);
+            else sctx.lineTo(sx, sy);
+          }
+          sctx.stroke();
+          sctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+          sctx.fillText("progress", sw - 52, 12);
+
+          // Playhead
+          var p3 = phaseRef.current;
+          if (p3.phase === "wandering" && p3.startTime > 0) {
+            var playDt = now - p3.startTime;
+            var playX = Math.min(playDt / WANDER_DURATION, 1.0) * sw;
+
+            sctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+            sctx.lineWidth = 1;
+            sctx.beginPath();
+            sctx.moveTo(playX, 0);
+            sctx.lineTo(playX, sh);
+            sctx.stroke();
+
+            // Dot on the speed curve at playhead
+            var playSpeed = 1.0 + 0.15 * Math.sin(playDt * 7.3) + 0.1 * Math.sin(playDt * 3.1);
+            var playY = baseY - (playSpeed - 1.0) * yScale / 0.25;
+            sctx.beginPath();
+            sctx.arc(playX, playY, 4, 0, Math.PI * 2);
+            sctx.fillStyle = "#00D177";
+            sctx.fill();
+          }
+        }
+      }
     }
 
     animRef.current = requestAnimationFrame(animate);
@@ -285,6 +387,13 @@ export default function OklabSandboxPage() {
           className="absolute inset-0"
         />
       </div>
+
+      <canvas
+        ref={speedCanvasRef}
+        width={CANVAS_SIZE}
+        height={80}
+        className="border border-white/10"
+      />
 
       <div className="flex items-center gap-4">
         <span className="text-white/40 text-[10px]">L</span>

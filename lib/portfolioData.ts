@@ -190,7 +190,7 @@ export const PROJECTS: Record<string, Project> = {
   },
   wonwei: {
     id: "wonwei",
-    title: "Wonwei — Olafur Arnalds Tour",
+    title: "Creative Director & Live 3D Systems Architect for Olafur Arnalds World Tour",
     description: "Real-time immersive 3D visual show for musician Olafur Arnalds' world tour. Software landscapes responding to live music and performer movement via Kinect camera. Art Director and Technical Lead at Wonwei, a research-driven design and technology studio.",
     roles: ["Art Direction", "Technical Direction", "Software Dev", "Creative Technology"],
     categories: ["Interactive", "Mechatronic", "Exhibition/Museum"],

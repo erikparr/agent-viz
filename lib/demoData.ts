@@ -36,10 +36,10 @@ print(f"Found {len(projects)} projects")`,
         stepNumber: 4,
         timestamp: 2500,
         toolResult: {
-          output: "Found 27 projects across categories: AI (8), Interactive (18), Exhibition/Museum (12), AR/VR (7), 3D (8), Artwork (7), Mechatronic (5). Projects span from installation art and physical computing to AI-native product design and agentic systems.",
+          output: "Found 29 projects across categories: AI (9), Interactive (18), Exhibition/Museum (12), AR/VR (7), 3D (8), Artwork (7), Mechatronic (5), Writing (1). Projects span from installation art and physical computing to AI-native product design, agentic systems, and writing on product strategy.",
           success: true,
         },
-        projectRefs: ["intuitive", "foam", "designsystem", "agentic3d", "landscape", "extrasensory", "arheadtracking", "immersivemotion", "interactive3dweb", "touchless", "futurestudio", "webxr"],
+        projectRefs: ["intuitive", "productlatentspace", "foam", "designsystem", "agentic3d", "landscape", "extrasensory", "arheadtracking", "immersivemotion", "interactive3dweb", "touchless", "futurestudio", "webxr"],
       },
       {
         type: "thinking",
@@ -54,6 +54,7 @@ print(f"Found {len(projects)} projects")`,
         code: `categories = {
     "AI / Product": [
         "Intuitive Surgical — surgical video analytics prototypes",
+        "Product Latent Space — essay on AI product development",
         "FOAM — AI speech synthesis instrument (shipped product)",
         "Agentic 3D Environments — UX research",
         "Exquisite Landscape — generative AI art",
@@ -77,6 +78,7 @@ for cat, items in categories.items():
         codeOutput: `
 AI / Product:
   - Intuitive Surgical — surgical video analytics prototypes
+  - Product Latent Space — essay on AI product development
   - FOAM — AI speech synthesis instrument (shipped product)
   - Agentic 3D Environments — UX research
   - Exquisite Landscape — generative AI art
@@ -97,7 +99,7 @@ Installation / Art:
         stepNumber: 7,
         timestamp: 6000,
         projectRefs: ["adidas", "shaders", "prague", "microsoft", "screamometer", "resonators"],
-        finalAnswer: "Erik's portfolio spans 27 projects across AI product design, interactive experiences, and installation art.\n\nRecent AI/Product work includes advanced surgical video prototypes at Intuitive Surgical, FOAM (an AI speech-to-instrument product shipped commercially), and UX research into agentic 3D environments.\n\nInteractive work includes WebGL shader experiments, 3D web campaigns, and the permanent Adidas AR exhibition in Germany.\n\nInstallation and art projects include work at the Prague National Gallery, Microsoft Cybercrime Center (botnet data visualization), and mechatronic sound sculptures exhibited internationally.\n\nHe also founded Extrasensory, a digital product studio that shipped VEX MIDI Expression and FOAM — both used by music producers worldwide.",
+        finalAnswer: "Erik's portfolio spans 29 projects across AI product design, interactive experiences, installation art, and writing.\n\nRecent AI/Product work includes advanced surgical video prototypes at Intuitive Surgical, an essay on product latent space exploring how AI transforms product development, FOAM (an AI speech-to-instrument product shipped commercially), and UX research into agentic 3D environments.\n\nInteractive work includes WebGL shader experiments, 3D web campaigns, and the permanent Adidas AR exhibition in Germany.\n\nInstallation and art projects include work at the Prague National Gallery, Microsoft Cybercrime Center (botnet data visualization), and mechatronic sound sculptures exhibited internationally.\n\nHe also founded Extrasensory, a digital product studio that shipped VEX MIDI Expression and FOAM — both used by music producers worldwide.",
       },
     ],
   },

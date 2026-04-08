@@ -9,7 +9,7 @@ export interface Project {
   description: string;
   roles: string[];
   categories: string[];
-  mediaType: "image" | "vimeo" | "foam3d";
+  mediaType: "image" | "vimeo" | "foam3d" | "essay";
   mediaContent: string | string[];
   link?: string;
   details?: ProjectDetail[];
@@ -45,6 +45,41 @@ export const PROJECTS: Record<string, Project> = {
       {
         heading: "Outcomes",
         body: "Ran a human factors study with a surgeon panel. Core assumptions confirmed. Presented to upper management; received well. Product requirements were defined from research that was still being published during the build.",
+      },
+    ],
+  },
+  productlatentspace: {
+    id: "productlatentspace",
+    title: "Product Latent Space",
+    description: "An essay exploring how AI's collapse of build costs transforms product development from a flow-based model of inputs and outputs toward an architectural model of interiority and exteriority — where products become infinitely configurable latent spaces rather than fixed feature sets.",
+    roles: ["Product Strategy", "AI/ML", "Product Design"],
+    categories: ["Writing", "AI"],
+    mediaType: "essay",
+    mediaContent: "/images/product-latent-space.png",
+    details: [
+      {
+        heading: "The collapse of build cost",
+        body: "Everyone who is building products today with AI is now working to update their mental model of what it means to build a product. The basic model went like this: you get an idea for a product (hypothesis), you build the product, test your product, learn and repeat. This gives a basic outline but lets map out where the real effort is happening. In product development, building is conventionally what takes up most of the resource spend. This has long been the standard. According to Henry Ford's design maxim genius is 99% perspiration and 1% inspiration. The product is in the doing.\n\nWhat is so significant in the development of AI tools is that it has collapsed the resource cost building software to near-zero. The collapse of the build phase into a process of continuous generation elicits a new architectural model: away from the flow based model of inputs and outputs toward an architectural model of interiority and exteriority.",
+      },
+      {
+        heading: "Product exteriority",
+        body: "Product exteriority is the customer facing surface. As company build capabilities are increased, many products are exposing experiments and prototypes as public facing sandboxes and prototypes. Google Labs is an example of this model, strategically opening up public participation in the testing process while doubling as a showcase that provided effective marketing. Here, the exterior of a product becomes an interface that increasingly resembles an LLM interface, the product as output tokens generated from a vast queryable database that responds to user prompts.",
+      },
+      {
+        heading: "Product interiority",
+        body: "Product interiority is the latent space of the product. As product build cost approaches zero it becomes infinitely configurable. Previously, a finished product was a published artifact that contained an aggregate of features that made the cut to production. This approach was predicated on significant cost in the build phase, which now does not exist. The previous model is analogous to the newspaper maxim \"all the news fit to print\" whereas now you just prompt the chatbot to give you the news of the day.",
+      },
+      {
+        heading: "The latent space model",
+        body: "The latent space model of product attempts to give functionality to abstract design parameters: structure, regions, density. A basic sketch: the market defines the parameter space, topology are regions of product fitness, the attributes of which imply an efficient solution to some problem in the market. The space is Nth dimensional some areas are known, some are known unknowns, and much are unknown unknowns. The task of the product team may be as much defining the limits in scope of the product than any one particular feature profile.",
+      },
+      {
+        heading: "LLM knowledge base",
+        body: "What does all this look like in practice and how can it be effectively applied to the design process? A new and growing approach is LLM Knowledge Base. In this model an LLM ingests all data produced by the company: business documents, meetings and presentations, repos and design documents is continuously ingested into a database. Andrei Karpathy proposes a legibility layer in the form of a continuously updated wiki: \"the LLM incrementally builds and maintains a persistent wiki — a structured, interlinked collection of markdown files that sits between you and the raw sources.\" Here the product knowledge base is a continually updated LLM model.",
+      },
+      {
+        heading: "Product deployment as knowledge base",
+        body: "This model can be extended to product deployment. If we apply the knowledge base model to the product, the user interfaces with the product through an agent of some kind. The user agent and the product agent will together decide how to best serve the user's needs based on the range of capabilities of the product. Here the conventional hierarchy of product development of Development > Feature > Release > Production would be flattened. Features, prototypes, experiments would all be accessible in the product and the user's agent would help navigate the product stack. This has the added benefit of collapsing user testing into the product, as products can continuously adapt based on user interaction. If users do not return to a specific feature its reputation score could flag it for revision or obsolescence.",
       },
     ],
   },

@@ -17,7 +17,7 @@ export var toolDefinitions: Anthropic.Tool[] = [
         },
         category: {
           type: "string",
-          description: "Optional category filter: AI, Interactive, Exhibition/Museum, AR/VR, 3D, Artwork, Mechatronic",
+          description: "Optional category filter: AI, Interactive, Exhibition/Museum, AR/VR, 3D, Artwork, Mechatronic, Writing",
         },
       },
       required: ["query"],

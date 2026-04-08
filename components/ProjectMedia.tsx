@@ -35,7 +35,7 @@ export function ProjectMedia({ project, className = "" }: ProjectMediaProps) {
     );
   }
 
-  // Image type — handle single or array
+  // Image or essay type — handle single or array
   var src = Array.isArray(project.mediaContent)
     ? project.mediaContent[0]
     : project.mediaContent;

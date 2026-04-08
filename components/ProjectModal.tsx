@@ -71,10 +71,16 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   {project.title}
                 </h2>
 
-                <div className="text-xs text-text-secondary">
-                  <span className="text-border-accent">roles:</span>{" "}
-                  {project.roles.join(", ")}
-                </div>
+                {project.mediaType === "essay" ? (
+                  <div className="text-[11px] italic text-text-secondary tracking-wide">
+                    by Erik Parr
+                  </div>
+                ) : (
+                  <div className="text-xs text-text-secondary">
+                    <span className="text-border-accent">roles:</span>{" "}
+                    {project.roles.join(", ")}
+                  </div>
+                )}
 
                 <p className="text-xs leading-relaxed text-text-primary">
                   {project.description}

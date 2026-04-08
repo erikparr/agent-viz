@@ -68,7 +68,7 @@ export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
         ))}
         <a
           href="mailto:erik@erikparr.com?subject=Hello%20Erik"
-          className="text-xs px-3 py-2 min-h-[44px] border border-border-accent text-border-accent hover:bg-border-accent hover:text-black focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors inline-flex items-center"
+          className="text-xs px-3 py-2 min-h-[44px] border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors inline-flex items-center"
         >
           Contact Erik
         </a>

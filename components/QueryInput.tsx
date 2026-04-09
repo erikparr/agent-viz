@@ -69,7 +69,8 @@ export function QueryInput({ onSubmit, onContact, disabled }: QueryInputProps) {
         ))}
         <button
           onClick={onContact}
-          className="text-xs px-3 py-2 min-h-[44px] border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors"
+          disabled={disabled}
+          className="text-xs px-3 py-2 min-h-[44px] border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors disabled:opacity-30"
         >
           Contact Erik
         </button>

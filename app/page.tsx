@@ -9,6 +9,7 @@ import { QueryInput } from "@/components/QueryInput";
 import { AgentFlow } from "@/components/AgentFlow";
 import { SidePanel } from "@/components/SidePanel";
 import { ProjectModal } from "@/components/ProjectModal";
+import { ContactModal } from "@/components/ContactModal";
 import { useAgentStream } from "@/hooks/useAgentStream";
 import type { Project } from "@/lib/portfolioData";
 
@@ -25,6 +26,7 @@ const DitherRenderer = dynamic(
 export default function Home() {
   var { run, startRun, reset } = useAgentStream();
   var [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  var [contactOpen, setContactOpen] = useState(false);
   var ditherRef = useRef<DitherRendererHandle>(null);
 
   var handleSubmit = useCallback((query: string, isPreset?: boolean) => {
@@ -57,6 +59,7 @@ export default function Home() {
               <div className="flex-1 min-w-0">
                 <QueryInput
                   onSubmit={handleSubmit}
+                  onContact={() => setContactOpen(true)}
                   disabled={run?.status === "running"}
                 />
               </div>
@@ -117,6 +120,11 @@ export default function Home() {
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
+      />
+
+      <ContactModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
       />
     </>
   );

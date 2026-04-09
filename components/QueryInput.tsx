@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 
 interface QueryInputProps {
   onSubmit: (query: string, isPreset?: boolean) => void;
+  onContact: () => void;
   disabled?: boolean;
 }
 
@@ -16,7 +17,7 @@ const PRESET_QUERIES = [
   "Show resume",
 ];
 
-export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
+export function QueryInput({ onSubmit, onContact, disabled }: QueryInputProps) {
   var [value, setValue] = useState("");
 
   var handleSubmit = useCallback(() => {
@@ -66,12 +67,12 @@ export function QueryInput({ onSubmit, disabled }: QueryInputProps) {
             {q}
           </button>
         ))}
-        <a
-          href="mailto:erik@erikparr.com?subject=Hello%20Erik"
-          className="text-xs px-3 py-2 min-h-[44px] border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors inline-flex items-center"
+        <button
+          onClick={onContact}
+          className="text-xs px-3 py-2 min-h-[44px] border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors"
         >
           Contact Erik
-        </a>
+        </button>
       </div>
     </div>
   );

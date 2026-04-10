@@ -102,19 +102,19 @@ const BLOB_FRAGMENT = `
     vec3 N = normalize(vNormal);
     vec3 V = normalize(vViewPosition);
 
-    // Key light
+    // Key light (half-Lambert: wraps around surface, never reaches 0)
     vec3 lightDir = normalize(vec3(3.0, 4.0, 2.0));
-    float diffuse = max(dot(N, lightDir), 0.0);
+    float diffuse = dot(N, lightDir) * 0.5 + 0.5;
 
-    // Fill light
+    // Fill light (also half-Lambert)
     vec3 fillDir = normalize(vec3(-2.0, 1.0, -1.0));
-    float fill = max(dot(N, fillDir), 0.0) * 0.3;
+    float fill = (dot(N, fillDir) * 0.5 + 0.5) * 0.3;
 
     // Specular
     vec3 halfDir = normalize(lightDir + V);
     float spec = pow(max(dot(N, halfDir), 0.0), 32.0) * 0.4;
 
-    float luma = 0.15 + diffuse * 0.6 + fill + spec;
+    float luma = 0.25 + diffuse * 0.45 + fill + spec;
     gl_FragColor = vec4(vec3(luma), 1.0);
   }
 `;

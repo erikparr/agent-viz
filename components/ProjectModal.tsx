@@ -4,6 +4,7 @@ import { useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./TerminalChrome";
 import { ProjectMedia } from "./ProjectMedia";
+import { FoamPipeline } from "./foam-pipeline/FoamPipeline";
 import type { Project } from "@/lib/portfolioData";
 
 interface ProjectModalProps {
@@ -85,6 +86,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <p className="text-xs leading-relaxed text-text-primary">
                   {project.description}
                 </p>
+
+                {project.id === "foam" && <FoamPipeline />}
 
                 {project.details && (
                   <div className="space-y-0">

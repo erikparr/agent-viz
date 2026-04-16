@@ -45,3 +45,19 @@ fieldset {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-muted) transparent;
 }
+
+/* FOAM pipeline — scoped token bridge mapping portfolio-presentation design
+   system to agent-viz's existing palette. Visuals inherit these vars. */
+.foam-pipeline {
+  --color-surface: var(--color-bg-surface);
+  --color-surface-2: var(--color-bg-elevated);
+  --color-bg-deep: var(--color-bg-primary);
+  --color-hairline: var(--color-border-muted);
+  --color-hairline-strong: var(--color-border-accent);
+  --color-text: var(--color-text-primary);
+  --color-text-dim: var(--color-text-secondary);
+  --color-text-mute: color-mix(in oklch, var(--color-text-secondary) 55%, transparent);
+  --color-accent: var(--color-step-tool);
+  --radius-panel: 4px;
+  --radius-chip: 2px;
+}

@@ -40,5 +40,5 @@ export const FOAM_STAGES: PipelineStage[] = [
 ];
 
 export const CONNECTOR_ANNOTATIONS: Record<number, string> = {
-  3: ".phonemebundle",
+  2: ".phonemebundle",
 };

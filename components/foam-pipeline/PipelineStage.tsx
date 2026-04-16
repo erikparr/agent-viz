@@ -41,10 +41,7 @@ export function PipelineStageCard({
         </div>
 
         {visual && (
-          <div
-            className="shrink-0 w-full max-w-full sm:w-auto sm:self-stretch flex items-center sm:pl-5"
-            style={{}}
-          >
+          <div className="shrink-0 w-full max-w-full sm:w-auto sm:self-stretch flex items-center sm:pl-5">
             {visual}
           </div>
         )}

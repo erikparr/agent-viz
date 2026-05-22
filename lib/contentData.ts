@@ -125,8 +125,8 @@ export const CONTENT_BLOCKS: Record<string, ContentBlock> = {
           {
             heading: "Intuitive Surgical — 2025 – Present",
             items: [
-              "Design Technologist, Advanced Product Design (Contract)",
-              "Sole design technologist building production-quality prototypes for surgical video and data tools",
+              "Design Engineer, Advanced Product Design (Contract)",
+              "Sole design engineer building production-quality prototypes for surgical video and data tools",
               "Designed and engineered AI-powered case summarization using local LLM integration",
               "Built 3D visualization tools for robotic tool path analysis using Three.js",
               "Translated complex clinical workflows into multi-panel interfaces with linked video/data timelines",
@@ -135,7 +135,7 @@ export const CONTENT_BLOCKS: Record<string, ContentBlock> = {
           {
             heading: "Extrasensory Studio — 2024 – Present",
             items: [
-              "Founder / Design Technologist",
+              "Founder / Design Engineer",
               "Shipped FOAM: full stack from C++/JUCE engine to React UI, Python backend, e-commerce",
               "Built async processing pipeline: TTS APIs, job queues, webhook payments, error recovery",
             ],
@@ -143,7 +143,7 @@ export const CONTENT_BLOCKS: Record<string, ContentBlock> = {
           {
             heading: "Indigo Slate — 2023 – 2025",
             items: [
-              "Senior Design Technologist",
+              "Senior Design Engineer",
               "Led systems design and frontend architecture for interactive tools and product experiences",
               "Built shared component libraries and design system tooling across multiple projects",
               "Drove R&D around AI-enhanced interfaces and real-time visualization",
@@ -152,7 +152,7 @@ export const CONTENT_BLOCKS: Record<string, ContentBlock> = {
           {
             heading: "Valtech — 2019 – 2023",
             items: [
-              "Senior Design Technologist / Software Engineer",
+              "Senior Design Engineer / Software Engineer",
               "Architected frontend systems and interaction layers for product tools and enterprise apps",
               "Built tools enabling designers to control real-time parameters without engineering support",
             ],
@@ -160,14 +160,14 @@ export const CONTENT_BLOCKS: Record<string, ContentBlock> = {
           {
             heading: "Kram/Weisshaar — 2017 – 2018",
             items: [
-              "Senior Design Technologist",
+              "Senior Design Engineer",
               "Interactive systems and real-time visualization at the intersection of software and physical product",
             ],
           },
           {
             heading: "Studio Erik Parr — 2012 – 2022",
             items: [
-              "Principal Design Technologist",
+              "Principal Design Engineer",
               "End-to-end product design and engineering for interactive tools, data visualizations, generative systems",
             ],
           },

@@ -21,14 +21,14 @@ export const PROJECTS: Record<string, Project> = {
     id: "intuitive",
     title: "Intuitive Surgical",
     description: "Designing and engineering advanced prototypes for future surgical video and analytics tools. Sole design engineer embedded in an advanced product design team, building case-explorer concepts that link procedure video with system data and event timelines, and prototyped interfaces for structured procedure insight and automated post-case review.",
-    roles: ["Design Technologist", "Data Visualization", "AI/ML"],
+    roles: ["Design Engineer", "Data Visualization", "AI/ML"],
     categories: ["AI", "Interactive"],
     mediaType: "image",
     mediaContent: "/images/intuitive.png",
     details: [
       {
         heading: "Context",
-        body: "As Design Technologist at Intuitive Surgical, I led the Advanced Product Design group in the development of new design principles through the development of functional, production ready prototypes (internal tools and product facing) to define the direction of the Product Design team 2-3 years into the future. Prototype production focused on the following areas:",
+        body: "As Design Engineer at Intuitive Surgical, I led the Advanced Product Design group in the development of new design principles through the development of functional, production ready prototypes (internal tools and product facing) to define the direction of the Product Design team 2-3 years into the future. Prototype production focused on the following areas:",
       },
       {
         heading: "3D surgical tool path visualization",

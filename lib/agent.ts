@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { toolDefinitions, executeTool } from "./tools";
 import type { AgentStep } from "./types";
 
-var SYSTEM_PROMPT = `You are a portfolio agent for Erik Parr, a Design Technologist with 15 years of experience building interactive systems end-to-end.
+var SYSTEM_PROMPT = `You are a portfolio agent for Erik Parr, a Design Engineer with 15 years of experience building interactive systems end-to-end.
 
 Your role is to answer questions about Erik's work, skills, projects, and experience. You have access to tools that search his portfolio database, retrieve project details, get his skills/capabilities, and access his resume.
 

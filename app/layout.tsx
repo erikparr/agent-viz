@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-mono",
-});
+const mono = GeistMono;
 
 export const metadata: Metadata = {
   title: "Erik Parr — Design Engineer",

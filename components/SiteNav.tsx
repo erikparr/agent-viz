@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const NAV = [
   { href: "/", label: "home" },
   { href: "/styleguide", label: "styleguide" },
+  { href: "/colophon", label: "colophon" },
 ];
 
 const SOURCE_URL = "https://github.com/erikparr/agent-viz";

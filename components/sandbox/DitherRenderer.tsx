@@ -322,7 +322,7 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
       function animate() {
         frameRef.current = requestAnimationFrame(animate);
 
-        if (document.hidden) return;
+        if (document.visibilityState === "hidden") return;
 
         var elapsed = clock.getElapsedTime();
         blobMaterial.uniforms.uTime.value = elapsed;

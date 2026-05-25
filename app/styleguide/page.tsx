@@ -109,7 +109,7 @@ export default function StyleguidePage() {
 
   return (
     <div className="min-h-screen bg-bg-primary">
-      <div className="max-w-5xl mx-auto px-6 py-12 space-y-10">
+      <div className="max-w-5xl mx-auto px-6 pt-16 pb-12 space-y-10">
         {/* Header */}
         <header className="space-y-2">
           <h1 className="text-2xl text-text-primary">Design System</h1>

@@ -6,6 +6,10 @@ import "./globals.css";
 
 const mono = GeistMono;
 
+// Runs before React hydrates — applies the user's saved theme (or system
+// preference) so there's no flash of the wrong theme on initial load.
+const NO_FOUC_SCRIPT = `(function(){try{var s=localStorage.getItem('theme');var l=s==='light'||(!s&&window.matchMedia('(prefers-color-scheme: light)').matches);if(l){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');}}catch(e){}})();`;
+
 export const metadata: Metadata = {
   title: "Erik Parr — Design Engineer",
   description: "Building Agentic Systems for Interactive Products. Portfolio of Erik Parr — product prototyping, systems design, AI-driven tools.",
@@ -29,7 +33,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${mono.variable}`}>
+    <html lang="en" className={`dark ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: NO_FOUC_SCRIPT }} />
+      </head>
       <body className="min-h-screen antialiased">
         <SiteNav />
         {children}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const NAV = [
   { href: "/", label: "home" },
@@ -10,8 +11,33 @@ const NAV = [
 
 const SOURCE_URL = "https://github.com/erikparr/agent-viz";
 
+type Theme = "dark" | "light";
+
+function useTheme(): [Theme, () => void] {
+  const [theme, setTheme] = useState<Theme>("dark");
+
+  useEffect(() => {
+    setTheme(
+      document.documentElement.classList.contains("light") ? "light" : "dark"
+    );
+  }, []);
+
+  function toggle() {
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    document.documentElement.classList.remove("dark", "light");
+    document.documentElement.classList.add(next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {}
+    setTheme(next);
+  }
+
+  return [theme, toggle];
+}
+
 export function SiteNav() {
   const pathname = usePathname();
+  const [theme, toggleTheme] = useTheme();
 
   return (
     <nav
@@ -35,9 +61,32 @@ export function SiteNav() {
           </Link>
         );
       })}
+
       <span className="text-border-muted" aria-hidden>
         ·
       </span>
+
+      <button
+        type="button"
+        onClick={toggleTheme}
+        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        className="text-text-secondary hover:text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border-accent"
+      >
+        <span className={theme === "dark" ? "text-text-primary" : ""}>
+          {theme === "dark" ? "[dark]" : "dark"}
+        </span>
+        <span className="text-border-muted" aria-hidden>
+          ·
+        </span>
+        <span className={theme === "light" ? "text-text-primary" : ""}>
+          {theme === "light" ? "[light]" : "light"}
+        </span>
+      </button>
+
+      <span className="text-border-muted" aria-hidden>
+        ·
+      </span>
+
       <a
         href={SOURCE_URL}
         target="_blank"

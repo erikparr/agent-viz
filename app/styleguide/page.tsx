@@ -1,27 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TerminalChrome } from "@/components/ui/TerminalChrome";
 import { Modal } from "@/components/ui/Modal";
 import { Button, ButtonLink } from "@/components/ui/Button";
 
 const SEMANTIC_COLORS = [
-  { name: "bg/primary", className: "bg-bg-primary", hex: "#050709" },
-  { name: "bg/surface", className: "bg-bg-surface", hex: "#0c1017" },
-  { name: "bg/elevated", className: "bg-bg-elevated", hex: "#151b25" },
-  { name: "border/accent", className: "bg-border-accent", hex: "#7d8ba0" },
-  { name: "border/muted", className: "bg-border-muted", hex: "#334155" },
-  { name: "text/primary", className: "bg-text-primary", hex: "#f1f5f9" },
-  { name: "text/secondary", className: "bg-text-secondary", hex: "#94a3b8" },
+  { name: "bg/primary", className: "bg-bg-primary", varName: "--bg-primary" },
+  { name: "bg/surface", className: "bg-bg-surface", varName: "--bg-surface" },
+  { name: "bg/elevated", className: "bg-bg-elevated", varName: "--bg-elevated" },
+  { name: "border/accent", className: "bg-border-accent", varName: "--border-accent" },
+  { name: "border/muted", className: "bg-border-muted", varName: "--border-muted" },
+  { name: "text/primary", className: "bg-text-primary", varName: "--text-primary" },
+  { name: "text/secondary", className: "bg-text-secondary", varName: "--text-secondary" },
 ];
 
 const STEP_COLORS = [
-  { name: "step/thinking", className: "bg-step-thinking", hex: "#b0bec9" },
-  { name: "step/code", className: "bg-step-code", hex: "#4ade80" },
-  { name: "step/tool", className: "bg-step-tool", hex: "#2d5ff5" },
-  { name: "step/result", className: "bg-step-result", hex: "#e2e8f0" },
-  { name: "step/final", className: "bg-step-final", hex: "#f8fafc" },
-  { name: "step/error", className: "bg-step-error", hex: "#f87171" },
+  { name: "step/thinking", className: "bg-step-thinking", varName: "--step-thinking" },
+  { name: "step/code", className: "bg-step-code", varName: "--step-code" },
+  { name: "step/tool", className: "bg-step-tool", varName: "--step-tool" },
+  { name: "step/result", className: "bg-step-result", varName: "--step-result" },
+  { name: "step/final", className: "bg-step-final", varName: "--step-final" },
+  { name: "step/error", className: "bg-step-error", varName: "--step-error" },
 ];
 
 const TYPE_RAMP = [7, 8, 9, 10, 11, 12, 13, 14, 18, 24];
@@ -34,22 +34,45 @@ const RADII = [
   { name: "full", value: 9999 },
 ];
 
+function useCssVar(varName: string) {
+  const [value, setValue] = useState<string>("");
+
+  useEffect(() => {
+    function read() {
+      const v = getComputedStyle(document.documentElement)
+        .getPropertyValue(varName)
+        .trim();
+      setValue(v);
+    }
+    read();
+    const observer = new MutationObserver(read);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, [varName]);
+
+  return value;
+}
+
 function Swatch({
   name,
   className,
-  hex,
+  varName,
 }: {
   name: string;
   className: string;
-  hex: string;
+  varName: string;
 }) {
+  const hex = useCssVar(varName);
   return (
     <div className="flex flex-col gap-1.5">
       <div
         className={`w-full aspect-square border border-border-muted ${className}`}
       />
       <div className="text-[10px] text-text-primary">{name}</div>
-      <div className="text-[9px] text-text-secondary">{hex}</div>
+      <div className="text-[9px] text-text-secondary font-mono">{hex || "—"}</div>
     </div>
   );
 }

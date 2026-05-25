@@ -1,22 +1,62 @@
 @import "tailwindcss";
 
+/* Tailwind generates utility classes (bg-bg-primary, text-text-secondary, etc.)
+   bound to these semantic tokens. Each semantic token points at a runtime
+   variable below, which swaps based on the active theme class on <html>. */
 @theme {
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  --color-bg-primary: #050709;
-  --color-bg-surface: #0c1017;
-  --color-bg-elevated: #151b25;
-  --color-border-accent: #7d8ba0;
-  --color-border-muted: #334155;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border-accent: var(--border-accent);
+  --color-border-muted: var(--border-muted);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
 
-  --color-step-thinking: #b0bec9;
-  --color-step-code: #4ade80;
-  --color-step-tool: #2d5ff5;
-  --color-step-result: #e2e8f0;
-  --color-step-final: #f8fafc;
-  --color-step-error: #f87171;
+  --color-step-thinking: var(--step-thinking);
+  --color-step-code: var(--step-code);
+  --color-step-tool: var(--step-tool);
+  --color-step-result: var(--step-result);
+  --color-step-final: var(--step-final);
+  --color-step-error: var(--step-error);
+}
+
+/* Dark — default theme */
+:root,
+.dark {
+  --bg-primary: #050709;
+  --bg-surface: #0c1017;
+  --bg-elevated: #151b25;
+  --border-accent: #7d8ba0;
+  --border-muted: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+
+  --step-thinking: #b0bec9;
+  --step-code: #4ade80;
+  --step-tool: #2d5ff5;
+  --step-result: #e2e8f0;
+  --step-final: #f8fafc;
+  --step-error: #f87171;
+}
+
+/* Light — applied when .light is on <html> */
+.light {
+  --bg-primary: #fafafa;
+  --bg-surface: #f1f3f5;
+  --bg-elevated: #e9ecef;
+  --border-accent: #495057;
+  --border-muted: #ced4da;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+
+  --step-thinking: #6b7280;
+  --step-code: #15803d;
+  --step-tool: #1d4ed8;
+  --step-result: #374151;
+  --step-final: #0a0a0a;
+  --step-error: #b91c1c;
 }
 
 body {

@@ -35,6 +35,10 @@ function useTheme(): [Theme, () => void] {
   return [theme, toggle];
 }
 
+function Divider() {
+  return <div className="w-px bg-border-muted self-stretch" aria-hidden />;
+}
+
 export function SiteNav() {
   const pathname = usePathname();
   const [theme, toggleTheme] = useTheme();
@@ -42,57 +46,63 @@ export function SiteNav() {
   return (
     <nav
       aria-label="Site"
-      className="fixed top-4 right-4 z-40 flex items-center gap-3 px-3 py-1.5 bg-bg-surface/85 backdrop-blur-sm border border-border-muted text-[10px] font-mono"
+      className="fixed top-4 right-4 z-40 flex items-stretch bg-bg-surface/85 backdrop-blur-sm border border-border-muted text-[10px] font-mono"
     >
-      {NAV.map((item) => {
-        const active = pathname === item.href;
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            aria-current={active ? "page" : undefined}
-            className={
-              active
-                ? "text-text-primary"
-                : "text-text-secondary hover:text-text-primary transition-colors"
-            }
-          >
-            {active ? `[${item.label}]` : item.label}
-          </Link>
-        );
-      })}
+      {/* Segment: nav links */}
+      <div className="flex items-center gap-4 px-4 py-2">
+        {NAV.map((item) => {
+          const active = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={
+                active
+                  ? "text-text-primary"
+                  : "text-text-secondary hover:text-text-primary transition-colors"
+              }
+            >
+              {active ? `[${item.label}]` : item.label}
+            </Link>
+          );
+        })}
+      </div>
 
-      <span className="text-border-muted" aria-hidden>
-        ·
-      </span>
+      <Divider />
 
+      {/* Segment: theme toggle */}
       <button
         type="button"
         onClick={toggleTheme}
         aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-        className="text-text-secondary hover:text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border-accent"
+        className="flex items-center gap-4 px-4 py-2 hover:bg-bg-elevated/50 transition-colors focus-visible:outline-none focus-visible:bg-bg-elevated/50"
       >
-        <span className={theme === "dark" ? "text-text-primary" : ""}>
+        <span
+          className={
+            theme === "dark" ? "text-text-primary" : "text-text-secondary"
+          }
+        >
           {theme === "dark" ? "[dark]" : "dark"}
         </span>
-        <span className="text-border-muted" aria-hidden>
-          ·
-        </span>
-        <span className={theme === "light" ? "text-text-primary" : ""}>
+        <span
+          className={
+            theme === "light" ? "text-text-primary" : "text-text-secondary"
+          }
+        >
           {theme === "light" ? "[light]" : "light"}
         </span>
       </button>
 
-      <span className="text-border-muted" aria-hidden>
-        ·
-      </span>
+      <Divider />
 
+      {/* Segment: source */}
       <a
         href={SOURCE_URL}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="View source on GitHub"
-        className="text-text-secondary hover:text-text-primary transition-colors"
+        className="flex items-center px-4 py-2 text-text-secondary hover:text-text-primary transition-colors"
       >
         src ↗
       </a>

@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import type { DitherRendererHandle } from "@/components/sandbox/DitherRenderer";
 import { CrosshatchBackground } from "@/components/CrosshatchBackground";
 import { TerminalChrome } from "@/components/ui/TerminalChrome";
+import { Button } from "@/components/ui/Button";
 import { QueryInput } from "@/components/QueryInput";
 import { AgentFlow } from "@/components/AgentFlow";
 import { SidePanel } from "@/components/SidePanel";
@@ -87,12 +88,9 @@ export default function Home() {
                       steps: <span className="text-text-primary">{run.steps.length}</span>
                     </span>
                     {run.status !== "running" && (
-                      <button
-                        onClick={reset}
-                        className="text-text-secondary hover:text-border-accent focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors"
-                      >
+                      <Button variant="ghost" size="sm" onClick={reset}>
                         [reset]
-                      </button>
+                      </Button>
                     )}
                   </div>
 

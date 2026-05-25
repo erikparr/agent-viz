@@ -1,6 +1,7 @@
 "use client";
 
 import { Modal } from "./ui/Modal";
+import { ButtonLink } from "./ui/Button";
 import { ProjectMedia } from "./ProjectMedia";
 import { FoamPipeline } from "./foam-pipeline/FoamPipeline";
 import type { Project } from "@/lib/portfolioData";
@@ -82,14 +83,15 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </div>
 
             {project.link && (
-              <a
+              <ButtonLink
                 href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-step-tool hover:underline shrink-0 focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none"
+                external
+                variant="ghost"
+                size="sm"
+                className="text-step-tool shrink-0 hover:underline hover:text-step-tool"
               >
                 [view project]
-              </a>
+              </ButtonLink>
             )}
           </div>
         </>

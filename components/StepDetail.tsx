@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./ui/TerminalChrome";
+import { Button } from "./ui/Button";
 import { STEP_THEME } from "@/lib/theme";
 import type { AgentStep } from "@/lib/types";
 
@@ -33,12 +34,9 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
                 <span className={`font-bold uppercase ${STEP_THEME[step.type].text}`}>
                   {step.type.replace("_", " ")}
                 </span>
-                <button
-                  onClick={onClose}
-                  className="text-text-secondary hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none"
-                >
+                <Button variant="ghost" size="sm" onClick={onClose}>
                   [close]
-                </button>
+                </Button>
               </div>
 
               {step.thought && (

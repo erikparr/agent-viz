@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Button } from "./ui/Button";
 
 interface QueryInputProps {
   onSubmit: (query: string, isPreset?: boolean) => void;
@@ -44,36 +45,43 @@ export function QueryInput({ onSubmit, onContact, disabled }: QueryInputProps) {
         {!disabled && value.trim() && (
           <span className="cursor-blink text-border-accent">_</span>
         )}
-        <button
+        <Button
+          variant="primary"
+          size="sm"
           onClick={handleSubmit}
           disabled={disabled || !value.trim()}
-          className="text-xs px-4 py-1.5 bg-border-accent text-black font-bold disabled:opacity-30 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-text-primary focus-visible:ring-offset-1 focus-visible:ring-offset-bg-primary transition-all"
+          loading={disabled}
+          className="px-4"
         >
           RUN
-        </button>
+        </Button>
       </div>
 
       <div className="flex flex-wrap gap-2">
         {PRESET_QUERIES.map((q) => (
-          <button
+          <Button
             key={q}
+            variant="secondary"
+            size="sm"
             onClick={() => {
               setValue(q);
               if (!disabled) onSubmit(q, true);
             }}
             disabled={disabled}
-            className="text-xs px-3 py-2 min-h-[44px] border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors disabled:opacity-30"
+            className="min-h-[44px] py-2"
           >
             {q}
-          </button>
+          </Button>
         ))}
-        <button
+        <Button
+          variant="secondary"
+          size="sm"
           onClick={onContact}
           disabled={disabled}
-          className="text-xs px-3 py-2 min-h-[44px] border border-border-muted text-text-secondary hover:border-border-accent hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none transition-colors disabled:opacity-30"
+          className="min-h-[44px] py-2"
         >
           Contact Erik
-        </button>
+        </Button>
       </div>
     </div>
   );

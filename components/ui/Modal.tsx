@@ -3,6 +3,7 @@
 import { useEffect, useCallback, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./TerminalChrome";
+import { Button } from "./Button";
 
 interface ModalProps {
   open: boolean;
@@ -79,12 +80,9 @@ export function Modal({
             <TerminalChrome title={title}>
               <div className="space-y-4">
                 <div className="flex justify-end">
-                  <button
-                    onClick={onClose}
-                    className="text-xs text-text-secondary hover:text-text-primary focus-visible:ring-2 focus-visible:ring-border-accent focus-visible:outline-none"
-                  >
+                  <Button variant="ghost" size="sm" onClick={onClose}>
                     [close]
-                  </button>
+                  </Button>
                 </div>
                 {children}
               </div>

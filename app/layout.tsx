@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
+import { SiteNav } from "@/components/SiteNav";
 import "./globals.css";
 
 const mono = GeistMono;
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${mono.variable}`}>
       <body className="min-h-screen antialiased">
+        <SiteNav />
         {children}
         <Analytics />
       </body>

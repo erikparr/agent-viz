@@ -13,8 +13,6 @@ const PRESET_QUERIES = [
   "Explore Erik's project portfolio",
   "Show skills & capabilities overview",
   "What is Erik's experience with AI and agentic systems?",
-  "What tech stack does Erik work with?",
-  "Describe Erik's most recent work",
   "Show resume",
 ];
 

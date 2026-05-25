@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TerminalChrome } from "../TerminalChrome";
+import { TerminalChrome } from "./TerminalChrome";
 
 interface ModalProps {
   open: boolean;

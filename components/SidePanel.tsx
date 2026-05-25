@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { TerminalChrome } from "./TerminalChrome";
+import { TerminalChrome } from "./ui/TerminalChrome";
 import { ContentBlock } from "./ContentBlock";
 import { ProjectCard } from "./ProjectCard";
 import { PROJECTS } from "@/lib/portfolioData";

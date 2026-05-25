@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { TerminalChrome } from "./TerminalChrome";
+import { TerminalChrome } from "./ui/TerminalChrome";
 import { STEP_THEME } from "@/lib/theme";
 import type { AgentStep } from "@/lib/types";
 

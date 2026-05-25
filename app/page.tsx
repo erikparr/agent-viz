@@ -4,7 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import type { DitherRendererHandle } from "@/components/sandbox/DitherRenderer";
 import { CrosshatchBackground } from "@/components/CrosshatchBackground";
-import { TerminalChrome } from "@/components/TerminalChrome";
+import { TerminalChrome } from "@/components/ui/TerminalChrome";
 import { QueryInput } from "@/components/QueryInput";
 import { AgentFlow } from "@/components/AgentFlow";
 import { SidePanel } from "@/components/SidePanel";

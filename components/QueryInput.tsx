@@ -9,12 +9,12 @@ interface QueryInputProps {
   disabled?: boolean;
 }
 
-const PRESET_QUERIES = [
+const PRESET_QUERIES_ROW_1 = [
   "Explore Erik's project portfolio",
   "Show skills & capabilities overview",
   "What is Erik's experience with AI and agentic systems?",
-  "Show resume",
 ];
+const PRESET_QUERIES_ROW_2 = ["Show resume"];
 
 export function QueryInput({ onSubmit, onContact, disabled }: QueryInputProps) {
   var [value, setValue] = useState("");
@@ -55,31 +55,50 @@ export function QueryInput({ onSubmit, onContact, disabled }: QueryInputProps) {
         </Button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {PRESET_QUERIES.map((q) => (
+      <div className="space-y-2">
+        <div className="flex flex-wrap gap-2">
+          {PRESET_QUERIES_ROW_1.map((q) => (
+            <Button
+              key={q}
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                setValue(q);
+                if (!disabled) onSubmit(q, true);
+              }}
+              disabled={disabled}
+              className="min-h-[44px] py-2"
+            >
+              {q}
+            </Button>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {PRESET_QUERIES_ROW_2.map((q) => (
+            <Button
+              key={q}
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                setValue(q);
+                if (!disabled) onSubmit(q, true);
+              }}
+              disabled={disabled}
+              className="min-h-[44px] py-2"
+            >
+              {q}
+            </Button>
+          ))}
           <Button
-            key={q}
             variant="secondary"
             size="sm"
-            onClick={() => {
-              setValue(q);
-              if (!disabled) onSubmit(q, true);
-            }}
+            onClick={onContact}
             disabled={disabled}
             className="min-h-[44px] py-2"
           >
-            {q}
+            Contact Erik
           </Button>
-        ))}
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={onContact}
-          disabled={disabled}
-          className="min-h-[44px] py-2"
-        >
-          Contact Erik
-        </Button>
+        </div>
       </div>
     </div>
   );

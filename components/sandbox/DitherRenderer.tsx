@@ -166,6 +166,24 @@ const DITHER_FRAGMENT = `
 
 const DEFAULT_BLOB_COLOR = "#9A8EC2";
 
+// Theme-dependent dither colors. Dark mode: dark canvas, cream dots.
+// Light mode: cream canvas, dark dots (the same two colors, swapped).
+interface DitherTheme {
+  colorA: number;
+  colorBg: number;
+}
+const DITHER_THEMES: { dark: DitherTheme; light: DitherTheme } = {
+  dark: { colorA: 0x0a0e14, colorBg: 0xe8e4d9 },
+  light: { colorA: 0xe8e4d9, colorBg: 0x0a0e14 },
+};
+
+function readDitherTheme(): DitherTheme {
+  if (typeof document === "undefined") return DITHER_THEMES.dark;
+  return document.documentElement.classList.contains("light")
+    ? DITHER_THEMES.light
+    : DITHER_THEMES.dark;
+}
+
 export interface DitherRendererHandle {
   flashColor: () => void;
 }
@@ -285,20 +303,33 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
       var ditherScene = new THREE.Scene();
       var ditherCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
+      var initialTheme = readDitherTheme();
       var ditherMaterial = new THREE.ShaderMaterial({
         uniforms: {
           uSceneTexture: { value: renderTarget.texture },
           uResolution: { value: new THREE.Vector2(512, 512) },
           uPixelScale: { value: 1.5 },
-          uColorA: { value: new THREE.Color(0x0a0e14) },
+          uColorA: { value: new THREE.Color(initialTheme.colorA) },
           uColorB: { value: new THREE.Color(DEFAULT_BLOB_COLOR) },
-          uColorBg: { value: new THREE.Color("#e8e4d9") },
+          uColorBg: { value: new THREE.Color(initialTheme.colorBg) },
           uBayer: { value: BAYER_4X4 },
         },
         vertexShader: DITHER_VERTEX,
         fragmentShader: DITHER_FRAGMENT,
       });
       materialRef.current = ditherMaterial;
+
+      // Live-update dither colors when the page theme changes
+      function applyTheme() {
+        var t = readDitherTheme();
+        ditherMaterial.uniforms.uColorA.value.setHex(t.colorA);
+        ditherMaterial.uniforms.uColorBg.value.setHex(t.colorBg);
+      }
+      var themeObserver = new MutationObserver(applyTheme);
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
 
       var quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), ditherMaterial);
       ditherScene.add(quad);
@@ -385,6 +416,7 @@ export const DitherRenderer = forwardRef<DitherRendererHandle>(
       // --- Cleanup ---
       return () => {
         resizeObserver.disconnect();
+        themeObserver.disconnect();
         cancelAnimationFrame(frameRef.current);
         renderer.dispose();
         renderTarget.dispose();

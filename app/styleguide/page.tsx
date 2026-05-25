@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { TerminalChrome } from "@/components/ui/TerminalChrome";
 import { Modal } from "@/components/ui/Modal";
+import { Button, ButtonLink } from "@/components/ui/Button";
 
 const SEMANTIC_COLORS = [
   { name: "bg/primary", className: "bg-bg-primary", hex: "#050709" },
@@ -152,6 +153,79 @@ export default function StyleguidePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </Section>
+
+        {/* Primitives — Button */}
+        <Section title="Primitive · Button">
+          <p className="text-[10px] text-text-secondary mb-3">
+            <code className="text-border-accent">components/ui/Button.tsx</code>
+            {" — "}
+            Three variants × three sizes. <code className="text-border-accent">loading</code>{" "}
+            and <code className="text-border-accent">disabled</code> states.{" "}
+            <code className="text-border-accent">prefix</code>/<code className="text-border-accent">suffix</code>{" "}
+            slots for icons. <code className="text-border-accent">ButtonLink</code> is the{" "}
+            <code className="text-border-accent">&lt;a&gt;</code> counterpart.
+          </p>
+
+          {/* Variants × Sizes grid */}
+          <div className="space-y-4">
+            {(["primary", "secondary", "ghost"] as const).map((variant) => (
+              <div key={variant} className="space-y-2">
+                <div className="text-[10px] text-text-secondary uppercase tracking-[0.2em]">
+                  variant={variant}
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  {(["xs", "sm", "md"] as const).map((size) => (
+                    <Button key={size} variant={variant} size={size}>
+                      size={size}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* States */}
+          <div className="mt-6 space-y-2">
+            <div className="text-[10px] text-text-secondary uppercase tracking-[0.2em]">
+              states
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="primary">default</Button>
+              <Button variant="primary" disabled>
+                disabled
+              </Button>
+              <Button variant="primary" loading>
+                loading
+              </Button>
+              <Button variant="secondary" prefix={<span>→</span>}>
+                with prefix
+              </Button>
+              <Button variant="secondary" suffix={<span>↗</span>}>
+                with suffix
+              </Button>
+            </div>
+          </div>
+
+          {/* ButtonLink */}
+          <div className="mt-6 space-y-2">
+            <div className="text-[10px] text-text-secondary uppercase tracking-[0.2em]">
+              ButtonLink (anchor)
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <ButtonLink href="#" variant="secondary">
+                internal link
+              </ButtonLink>
+              <ButtonLink
+                href="https://vercel.com/geist/button"
+                external
+                variant="ghost"
+                suffix={<span>↗</span>}
+              >
+                [external link]
+              </ButtonLink>
+            </div>
           </div>
         </Section>
 

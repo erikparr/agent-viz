@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useTypewriterLines } from "@/hooks/useTypewriter";
 import { STEP_THEME } from "@/lib/theme";
+import { StepCard } from "@/components/ui/StepCard";
 import type { AgentStep } from "@/lib/types";
 
 function stripMarkdown(text: string): string {
@@ -47,64 +47,26 @@ export function FlowNode({ step, index, isActive, onClick }: FlowNodeProps) {
   var renderedLines = lines.map((_, i) => displayedLines[i] || "");
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -8 }}
-      animate={{
-        opacity: 1,
-        x: 0,
-      }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
+    <StepCard
+      index={index}
+      label={theme.label}
+      textClass={theme.text}
+      borderClass={theme.border}
+      bgClass={theme.bg}
+      glowHex={theme.hex}
+      isActive={isActive}
       onClick={onClick}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick?.(); } }}
-      role="button"
-      tabIndex={0}
-      className="cursor-pointer group focus-visible:outline-none"
     >
-      <div
-        className="relative w-full overflow-hidden transition-[filter] duration-200"
-        style={{
-          filter: isActive ? `drop-shadow(0 0 8px ${theme.hex})` : "none",
-        }}
-      >
-        {/* Top border with step number and label */}
-        <div className={`flex items-center text-xs leading-none ${theme.text}`}>
-          <span>╭── </span>
-          <span className="text-text-secondary font-normal">{String(index + 1).padStart(2, "0")}</span>
-          <span className="mx-1 text-border-muted">·</span>
-          <span className="font-bold">{theme.label}</span>
-          <span className="flex-1 min-w-0 overflow-hidden whitespace-nowrap">
-            {" "}{"─".repeat(120)}
+      {renderedLines.map((line, i) => (
+        <div key={i} className="text-xs leading-snug min-w-0">
+          <span className={`block truncate ${contentTextClass}`}>
+            {line}
+            {!done && i === (displayedLines.length - 1) && (
+              <span className="inline-block w-[6px] h-[12px] align-middle bg-border-accent cursor-blink ml-px" />
+            )}
           </span>
-          <span>╮</span>
         </div>
-
-        {/* Content lines with tinted background */}
-        <div className={`${theme.bg} group-hover:brightness-150 transition-[filter] duration-150`}>
-          {renderedLines.map((line, i) => (
-            <div key={i} className="flex text-xs leading-snug">
-              <span className={theme.text}>│</span>
-              <div className="flex-1 px-2 min-w-0">
-                <span className={`block truncate ${contentTextClass}`}>
-                  {line}
-                  {!done && i === (displayedLines.length - 1) && (
-                    <span className="inline-block w-[6px] h-[12px] align-middle bg-border-accent cursor-blink ml-px" />
-                  )}
-                </span>
-              </div>
-              <span className={theme.text}>│</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom border */}
-        <div className={`flex items-center text-xs leading-none ${theme.text}`}>
-          <span>╰</span>
-          <span className="flex-1 min-w-0 overflow-hidden whitespace-nowrap">
-            {"─".repeat(120)}
-          </span>
-          <span>╯</span>
-        </div>
-      </div>
-    </motion.div>
+      ))}
+    </StepCard>
   );
 }

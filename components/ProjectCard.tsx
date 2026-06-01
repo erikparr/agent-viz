@@ -19,7 +19,7 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } }}
       role="button"
       tabIndex={0}
-      className="cursor-pointer group focus-visible:outline-none"
+      className="cursor-pointer group focus-visible:outline-none max-w-2xl mx-auto"
     >
       <div className="border border-border-muted hover:border-border-accent transition-colors">
         <ProjectMedia

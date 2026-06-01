@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { animate, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
 import type { DitherRendererHandle } from "@/components/sandbox/DitherRenderer";
 import { CrosshatchBackground } from "@/components/CrosshatchBackground";
@@ -48,13 +49,38 @@ export default function Home() {
   );
   var modalOpen = selectedProject !== null;
 
+  var sideRef = useRef<HTMLDivElement>(null);
+  var scrollFired = useRef(false);
+  var reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!hasSideContent) {
+      scrollFired.current = false;
+      return;
+    }
+    if (scrollFired.current || !sideRef.current) return;
+    scrollFired.current = true;
+
+    var targetY = sideRef.current.getBoundingClientRect().top + window.scrollY;
+    if (reduceMotion) {
+      window.scrollTo(0, targetY);
+      return;
+    }
+    var controls = animate(window.scrollY, targetY, {
+      duration: 0.7,
+      ease: [0.22, 0.61, 0.36, 1],
+      onUpdate: (v) => window.scrollTo(0, v),
+    });
+    return () => controls.stop();
+  }, [hasSideContent, reduceMotion]);
+
   return (
     <>
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
-      <div className={`relative z-10 flex flex-col min-h-screen lg:h-screen max-w-7xl mx-auto px-4 pt-14 pb-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
-        {/* Header — fixed height */}
-        <div className="shrink-0 pb-4">
+      <div className={`relative z-10 flex flex-col min-h-screen max-w-7xl mx-auto px-4 pt-14 pb-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
+        {/* Header — sticky so the query stays reachable while scrolling portfolio */}
+        <div className="sticky top-0 z-20 shrink-0 pb-4 bg-bg-primary/85 backdrop-blur-sm">
           <TerminalChrome title="erik parr — portfolio agent">
             <div className="flex gap-4">
               <div className="flex-1 min-w-0">
@@ -71,11 +97,11 @@ export default function Home() {
           </TerminalChrome>
         </div>
 
-        {/* Content — fills remaining viewport */}
+        {/* Content — stacked full-width sections; page scrolls naturally */}
         {run && (
-          <div className={`flex gap-6 lg:min-h-0 flex-1 ${hasSideContent ? "flex-col lg:flex-row" : ""}`}>
-            {/* Left column — agent flow */}
-            <div className={`${hasSideContent ? "lg:w-3/5" : "w-full"} lg:min-h-0 lg:overflow-y-auto scrollbar-terminal`}>
+          <div className="flex flex-col gap-6">
+            {/* RUN section */}
+            <div className="w-full">
               <TerminalChrome title={`Run: ${run.query.slice(0, 50)}`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
@@ -105,9 +131,9 @@ export default function Home() {
               </TerminalChrome>
             </div>
 
-            {/* Right column — side panel */}
+            {/* Portfolio section — appears below; auto-scrolls into view on first reveal */}
             {hasSideContent && (
-              <div className="lg:w-2/5 lg:min-h-0 lg:overflow-y-auto scrollbar-terminal">
+              <div ref={sideRef} className="w-full">
                 <SidePanel run={run} onSelectProject={setSelectedProject} />
               </div>
             )}

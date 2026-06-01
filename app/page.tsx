@@ -30,6 +30,18 @@ export default function Home() {
   var [selectedProject, setSelectedProject] = useState<Project | null>(null);
   var [contactOpen, setContactOpen] = useState(false);
   var ditherRef = useRef<DitherRendererHandle>(null);
+  var queryColRef = useRef<HTMLDivElement>(null);
+  var [queryHeight, setQueryHeight] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!queryColRef.current) return;
+    var ro = new ResizeObserver((entries) => {
+      var h = entries[0]?.contentRect.height;
+      if (h) setQueryHeight(h);
+    });
+    ro.observe(queryColRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   var handleSubmit = useCallback((query: string, isPreset?: boolean) => {
     ditherRef.current?.flashColor();
@@ -82,17 +94,22 @@ export default function Home() {
         {/* Header — sticky so the query stays reachable while scrolling portfolio */}
         <div className="sticky top-0 z-20 shrink-0 pb-4 bg-bg-primary/85 backdrop-blur-sm">
           <TerminalChrome title="erik parr — portfolio agent">
-            <div className="flex gap-4">
-              <div className="flex-1 min-w-0">
+            <div className="flex gap-4 items-stretch">
+              <div ref={queryColRef} className="flex-1 min-w-0">
                 <QueryInput
                   onSubmit={handleSubmit}
                   onContact={() => setContactOpen(true)}
                   disabled={run?.status === "running"}
                 />
               </div>
-              <div className="hidden lg:block w-28 h-28 shrink-0 border border-border-muted">
-                <DitherRenderer ref={ditherRef} />
-              </div>
+              {queryHeight !== null && (
+                <div
+                  className="hidden lg:block shrink-0 border border-border-muted"
+                  style={{ width: queryHeight, height: queryHeight }}
+                >
+                  <DitherRenderer ref={ditherRef} />
+                </div>
+              )}
             </div>
           </TerminalChrome>
         </div>

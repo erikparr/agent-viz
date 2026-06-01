@@ -1,0 +1,23 @@
+{
+  "bg": {
+    "primary":  { "$value": "#fafafa", "$type": "color" },
+    "surface":  { "$value": "#f1f3f5", "$type": "color" },
+    "elevated": { "$value": "#e9ecef", "$type": "color" }
+  },
+  "border": {
+    "accent": { "$value": "#495057", "$type": "color" },
+    "muted":  { "$value": "#ced4da", "$type": "color" }
+  },
+  "text": {
+    "primary":   { "$value": "#111827", "$type": "color" },
+    "secondary": { "$value": "#6b7280", "$type": "color" }
+  },
+  "step": {
+    "thinking": { "$value": "#6b7280", "$type": "color" },
+    "code":     { "$value": "#15803d", "$type": "color" },
+    "tool":     { "$value": "#1d4ed8", "$type": "color" },
+    "result":   { "$value": "#374151", "$type": "color" },
+    "final":    { "$value": "#0a0a0a", "$type": "color" },
+    "error":    { "$value": "#b91c1c", "$type": "color" }
+  }
+}

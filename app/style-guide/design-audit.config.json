@@ -1,0 +1,96 @@
+{
+  "themeScopes": [
+    {
+      "name": "light",
+      "className": "light"
+    },
+    {
+      "name": "dark",
+      "className": "dark"
+    }
+  ],
+  "tokenDefs": [
+    {
+      "id": "bg.elevated",
+      "cssVar": "--bg-elevated",
+      "type": "color",
+      "group": "bg"
+    },
+    {
+      "id": "bg.primary",
+      "cssVar": "--bg-primary",
+      "type": "color",
+      "group": "bg"
+    },
+    {
+      "id": "bg.surface",
+      "cssVar": "--bg-surface",
+      "type": "color",
+      "group": "bg"
+    },
+    {
+      "id": "border.accent",
+      "cssVar": "--border-accent",
+      "type": "color",
+      "group": "border"
+    },
+    {
+      "id": "border.muted",
+      "cssVar": "--border-muted",
+      "type": "color",
+      "group": "border"
+    },
+    {
+      "id": "step.code",
+      "cssVar": "--step-code",
+      "type": "color",
+      "group": "step"
+    },
+    {
+      "id": "step.error",
+      "cssVar": "--step-error",
+      "type": "color",
+      "group": "step"
+    },
+    {
+      "id": "step.final",
+      "cssVar": "--step-final",
+      "type": "color",
+      "group": "step"
+    },
+    {
+      "id": "step.result",
+      "cssVar": "--step-result",
+      "type": "color",
+      "group": "step"
+    },
+    {
+      "id": "step.thinking",
+      "cssVar": "--step-thinking",
+      "type": "color",
+      "group": "step"
+    },
+    {
+      "id": "step.tool",
+      "cssVar": "--step-tool",
+      "type": "color",
+      "group": "step"
+    },
+    {
+      "id": "text.primary",
+      "cssVar": "--text-primary",
+      "type": "color",
+      "group": "text"
+    },
+    {
+      "id": "text.secondary",
+      "cssVar": "--text-secondary",
+      "type": "color",
+      "group": "text"
+    }
+  ],
+  "contrast": {
+    "text": ["text.primary", "text.secondary"],
+    "surfaces": ["bg.primary", "bg.surface", "bg.elevated"]
+  }
+}

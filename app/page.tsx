@@ -61,30 +61,43 @@ export default function Home() {
   );
   var modalOpen = selectedProject !== null;
 
+  var headerRef = useRef<HTMLDivElement>(null);
   var sideRef = useRef<HTMLDivElement>(null);
   var scrollFired = useRef(false);
   var reduceMotion = useReducedMotion();
 
+  var runComplete = run?.status === "completed";
+
   useEffect(() => {
-    if (!hasSideContent) {
+    if (!runComplete) {
       scrollFired.current = false;
       return;
     }
-    if (scrollFired.current || !sideRef.current) return;
+    if (!hasSideContent || scrollFired.current || !sideRef.current) return;
     scrollFired.current = true;
 
-    var targetY = sideRef.current.getBoundingClientRect().top + window.scrollY;
+    var headerH = headerRef.current?.getBoundingClientRect().height ?? 0;
+    var targetY = sideRef.current.getBoundingClientRect().top + window.scrollY - headerH;
+
     if (reduceMotion) {
       window.scrollTo(0, targetY);
       return;
     }
-    var controls = animate(window.scrollY, targetY, {
-      duration: 0.7,
-      ease: [0.22, 0.61, 0.36, 1],
-      onUpdate: (v) => window.scrollTo(0, v),
-    });
-    return () => controls.stop();
-  }, [hasSideContent, reduceMotion]);
+
+    var cancel: () => void = () => {};
+    var timer = setTimeout(() => {
+      var controls = animate(window.scrollY, targetY, {
+        duration: 1.1,
+        ease: [0.22, 0.61, 0.36, 1],
+        onUpdate: (v) => window.scrollTo(0, v),
+      });
+      cancel = () => controls.stop();
+    }, 250);
+    return () => {
+      clearTimeout(timer);
+      cancel();
+    };
+  }, [runComplete, hasSideContent, reduceMotion]);
 
   return (
     <>
@@ -92,7 +105,7 @@ export default function Home() {
 
       <div className={`relative z-10 flex flex-col min-h-screen max-w-7xl mx-auto px-4 pt-14 pb-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
         {/* Header — sticky so the query stays reachable while scrolling portfolio */}
-        <div className="sticky top-0 z-20 shrink-0 pb-4 bg-bg-primary/85 backdrop-blur-sm">
+        <div ref={headerRef} className="sticky top-0 z-20 shrink-0 pb-4 bg-bg-primary/85 backdrop-blur-sm">
           <TerminalChrome title="erik parr — portfolio agent">
             <div className="flex gap-4 items-stretch">
               <div ref={queryColRef} className="flex-1 min-w-0">

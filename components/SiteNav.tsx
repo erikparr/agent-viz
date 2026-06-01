@@ -46,7 +46,7 @@ export function SiteNav() {
   return (
     <nav
       aria-label="Site"
-      className="fixed top-4 right-4 z-40 flex items-stretch bg-bg-surface/85 backdrop-blur-sm border border-border-muted text-[10px] font-mono"
+      className="absolute top-4 right-4 z-10 flex items-stretch bg-bg-surface/85 backdrop-blur-sm border border-border-muted text-[10px] font-mono"
     >
       {/* Segment: nav links */}
       <div className="flex items-center gap-4 px-4 py-2">

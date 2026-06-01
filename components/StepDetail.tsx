@@ -29,7 +29,7 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
             title={`Step ${step.stepNumber} Detail`}
             colorClass={STEP_THEME[step.type].text}
           >
-            <div className={`space-y-3 text-xs ${STEP_THEME[step.type].bg}`}>
+            <div className="space-y-3 text-xs">
               <div className="flex justify-between items-center">
                 <span className={`font-bold uppercase ${STEP_THEME[step.type].text}`}>
                   {step.type.replace("_", " ")}

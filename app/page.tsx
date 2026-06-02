@@ -104,6 +104,28 @@ export default function Home() {
       <CrosshatchBackground agentStatus={run?.status ?? "idle"} />
 
       <div className={`relative z-10 flex flex-col min-h-screen max-w-7xl mx-auto px-4 pt-14 pb-4 transition-[filter] duration-200 ${modalOpen ? "blur-sm" : ""}`}>
+        {/* Title — Geist Sans display name paired with a mono eyebrow */}
+        <header className="shrink-0 mb-6">
+          <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-text-secondary">
+            design engineering
+          </p>
+          <h1 className="mt-2 flex items-baseline font-sans text-4xl sm:text-5xl font-medium tracking-tight leading-none text-text-primary lowercase">
+            erik parr
+            <span
+              className="ml-1.5 inline-block w-[0.45ch] h-[0.68em] cursor-blink translate-y-[0.02em]"
+              style={{
+                // Ordered-dither (Bayer-style checkerboard) in the blob's default color
+                backgroundColor: "#9A8EC2",
+                backgroundImage:
+                  "conic-gradient(rgba(0,0,0,0.55) 0 25%, transparent 0 50%, rgba(0,0,0,0.55) 0 75%, transparent 0)",
+                backgroundSize: "3px 3px",
+              }}
+              aria-hidden
+            />
+          </h1>
+          <div className="mt-5 h-px w-full bg-border-muted" />
+        </header>
+
         {/* Header — sticky so the query stays reachable while scrolling portfolio */}
         <div ref={headerRef} className="sticky top-0 z-20 shrink-0 pb-4 bg-bg-primary/85 backdrop-blur-sm">
           <TerminalChrome title="erik parr — portfolio agent">

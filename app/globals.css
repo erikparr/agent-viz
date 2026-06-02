@@ -5,6 +5,7 @@
    variable below, which swaps based on the active theme class on <html>. */
 @theme {
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 
   --color-bg-primary: var(--bg-primary);
   --color-bg-surface: var(--bg-surface);

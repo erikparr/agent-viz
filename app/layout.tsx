@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/next";
 import { SiteNav } from "@/components/SiteNav";
 import "./globals.css";
 
 const mono = GeistMono;
+const sans = GeistSans;
 
 // Runs before React hydrates — applies the user's saved theme (or system
 // preference) so there's no flash of the wrong theme on initial load.
@@ -33,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`dark ${mono.variable} ${sans.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FOUC_SCRIPT }} />
       </head>

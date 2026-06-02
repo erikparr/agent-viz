@@ -40,12 +40,14 @@ export function ProjectMedia({ project, className = "" }: ProjectMediaProps) {
     ? project.mediaContent[0]
     : project.mediaContent;
 
+  var contain = project.mediaFit === "contain";
+
   return (
-    <div className={`relative overflow-hidden bg-bg-surface ${className}`}>
+    <div className={`relative overflow-hidden ${contain ? "bg-bg-primary" : "bg-bg-surface"} ${className}`}>
       <img
         src={src}
         alt={project.title}
-        className="w-full h-full object-cover"
+        className={`w-full h-full ${contain ? "object-contain" : "object-cover"}`}
       />
     </div>
   );

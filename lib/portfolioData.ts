@@ -11,6 +11,9 @@ export interface Project {
   categories: string[];
   mediaType: "image" | "vimeo" | "foam3d" | "essay";
   mediaContent: string | string[];
+  /** How the image fills its frame. Defaults to "cover" (crops to fill);
+      use "contain" for screenshots/UI that must show in full without cropping. */
+  mediaFit?: "cover" | "contain";
   link?: string;
   details?: ProjectDetail[];
   defaultHidden?: boolean;
@@ -101,6 +104,17 @@ export const PROJECTS: Record<string, Project> = {
     categories: ["AI", "Interactive"],
     mediaType: "image",
     mediaContent: "/images/design-system-hero.png",
+  },
+  dstoolkit: {
+    id: "dstoolkit",
+    title: "Design System Toolkit",
+    description: "An open-source toolkit for design engineers: Claude skills paired with npm libraries to build a design system and audit it for contrast failures and cross-source token drift. The audit reads values directly from rendered CSS, so the reference can never drift from the real tokens — surfacing WCAG contrast failures, theme inconsistencies, and legacy leftovers.",
+    roles: ["Design Engineer", "Design Systems", "Open Source"],
+    categories: ["AI", "Interactive"],
+    mediaType: "image",
+    mediaContent: "/images/design-system-toolkit.png",
+    mediaFit: "contain",
+    link: "https://github.com/erikparr/design-system-toolkit",
   },
   foam: {
     id: "foam",

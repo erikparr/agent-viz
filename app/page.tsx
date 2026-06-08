@@ -13,7 +13,7 @@ import { SidePanel } from "@/components/SidePanel";
 import { ProjectModal } from "@/components/ProjectModal";
 import { ContactModal } from "@/components/ContactModal";
 import { useAgentStream } from "@/hooks/useAgentStream";
-import type { Project } from "@/lib/portfolioData";
+import { PROJECTS, type Project } from "@/lib/portfolioData";
 
 const DitherRenderer = dynamic(
   () =>
@@ -42,6 +42,20 @@ export default function Home() {
     ro.observe(queryColRef.current);
     return () => ro.disconnect();
   }, []);
+
+  // Deep link: open a project modal directly from ?project=<id> on first load
+  useEffect(() => {
+    var id = new URLSearchParams(window.location.search).get("project");
+    if (id && PROJECTS[id]) setSelectedProject(PROJECTS[id]);
+  }, []);
+
+  // Keep the URL in sync with the open project so it's shareable
+  useEffect(() => {
+    var url = new URL(window.location.href);
+    if (selectedProject) url.searchParams.set("project", selectedProject.id);
+    else url.searchParams.delete("project");
+    window.history.replaceState(null, "", url.toString());
+  }, [selectedProject]);
 
   var handleSubmit = useCallback((query: string, isPreset?: boolean) => {
     ditherRef.current?.flashColor();
@@ -111,17 +125,6 @@ export default function Home() {
           </p>
           <h1 className="mt-2 flex items-baseline font-sans text-4xl sm:text-5xl font-medium tracking-tight leading-none text-text-primary lowercase">
             erik parr
-            <span
-              className="ml-1.5 inline-block w-[0.45ch] h-[0.68em] cursor-blink translate-y-[0.02em]"
-              style={{
-                // Ordered-dither (Bayer-style checkerboard) in the blob's default color
-                backgroundColor: "#9A8EC2",
-                backgroundImage:
-                  "conic-gradient(rgba(0,0,0,0.55) 0 25%, transparent 0 50%, rgba(0,0,0,0.55) 0 75%, transparent 0)",
-                backgroundSize: "3px 3px",
-              }}
-              aria-hidden
-            />
           </h1>
           <div className="mt-5 h-px w-full bg-border-muted" />
         </header>

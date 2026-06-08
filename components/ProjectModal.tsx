@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Modal } from "./ui/Modal";
-import { ButtonLink } from "./ui/Button";
+import { Button, ButtonLink } from "./ui/Button";
 import { ProjectMedia } from "./ProjectMedia";
 import { FoamPipeline } from "./foam-pipeline/FoamPipeline";
 import type { Project } from "@/lib/portfolioData";
@@ -12,6 +13,20 @@ interface ProjectModalProps {
 }
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
+  var [copied, setCopied] = useState(false);
+
+  // Reset the "copied" affordance whenever a different project opens
+  useEffect(() => setCopied(false), [project?.id]);
+
+  function copyLink() {
+    if (!project) return;
+    var url = `${window.location.origin}/?project=${project.id}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    });
+  }
+
   return (
     <Modal
       open={project !== null}
@@ -82,17 +97,27 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               ))}
             </div>
 
-            {project.link && (
-              <ButtonLink
-                href={project.link}
-                external
+            <div className="flex items-center gap-3 shrink-0">
+              <Button
                 variant="ghost"
                 size="sm"
-                className="text-step-tool shrink-0 hover:underline hover:text-step-tool"
+                onClick={copyLink}
+                aria-label="Copy shareable link to this project"
               >
-                [view project]
-              </ButtonLink>
-            )}
+                {copied ? "[link copied]" : "[copy link]"}
+              </Button>
+              {project.link && (
+                <ButtonLink
+                  href={project.link}
+                  external
+                  variant="ghost"
+                  size="sm"
+                  className="text-step-tool hover:underline hover:text-step-tool"
+                >
+                  [view project]
+                </ButtonLink>
+              )}
+            </div>
           </div>
         </>
       )}

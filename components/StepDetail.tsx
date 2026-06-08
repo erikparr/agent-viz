@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { TerminalChrome } from "./ui/TerminalChrome";
 import { Button } from "./ui/Button";
+import { MeasuredText } from "./ui/MeasuredText";
 import { STEP_THEME } from "@/lib/theme";
 import type { AgentStep } from "@/lib/types";
 
@@ -42,7 +43,13 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
               {step.thought && (
                 <div>
                   <div className={`mb-1 opacity-70 ${STEP_THEME[step.type].text}`}>// reasoning</div>
-                  <pre className="whitespace-pre-wrap text-text-primary">{step.thought}</pre>
+                  <MeasuredText
+                    as="pre"
+                    text={step.thought}
+                    whiteSpace="pre-wrap"
+                    className="whitespace-pre-wrap text-text-primary"
+                  />
+
                 </div>
               )}
 
@@ -76,16 +83,24 @@ export function StepDetail({ step, onClose }: StepDetailProps) {
               {step.toolResult && (
                 <div>
                   <div className="mb-1 opacity-70 text-step-result">// result</div>
-                  <pre className="whitespace-pre-wrap text-text-primary">{stripMarkdown(step.toolResult.output)}</pre>
+                  <MeasuredText
+                    as="pre"
+                    text={stripMarkdown(step.toolResult.output)}
+                    whiteSpace="pre-wrap"
+                    className="whitespace-pre-wrap text-text-primary"
+                  />
                 </div>
               )}
 
               {step.finalAnswer && (
                 <div>
                   <div className="text-step-final mb-1">// final answer</div>
-                  <pre className="whitespace-pre-wrap p-2 border-l-2 border-step-final bg-step-final/5 text-step-final">
-                    {stripMarkdown(step.finalAnswer)}
-                  </pre>
+                  <MeasuredText
+                    as="pre"
+                    text={stripMarkdown(step.finalAnswer)}
+                    whiteSpace="pre-wrap"
+                    className="whitespace-pre-wrap p-2 border-l-2 border-step-final bg-step-final/5 text-step-final"
+                  />
                 </div>
               )}
             </div>
